@@ -1,0 +1,870 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RHCE + CKA 备考路线</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+/* Layout: 一本运维手册式的长页——顶部路线时间轴，下面按阶段排逐周计划，最后是可点选的知识网络与考场规则。三条轨道各有固定颜色，贯穿全页。 */
+:root {
+  --paper: #f5f6f8;
+  --surface: #ffffff;
+  --ink: #18202b;
+  --muted: #5a6575;
+  --line: #d8dde5;
+  --soft: #eceff4;
+  --base: #55657a;
+  --rhcsa: #b8322b;
+  --rhce: #a86400;
+  --cka: #2c5bc6;
+  --accent: #0d7468;
+  --accent-ink: #ffffff;
+  --font-display: "IBM Plex Sans Condensed", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-body: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --step--1: 0.82rem;
+  --step-0: 0.95rem;
+  --step-1: 1.12rem;
+  --step-2: 1.4rem;
+  --step-3: clamp(1.7rem, 4.2vw, 2.5rem);
+  --radius: 6px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0f141a; --surface: #161d26; --ink: #e5eaf1; --muted: #9aa5b4; --line: #2a3340; --soft: #1c2430;
+    --base: #9eb0c6; --rhcsa: #ff7a70; --rhce: #f2a640; --cka: #85a8ff; --accent: #3cc4b3; --accent-ink: #062521;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0f141a; --surface: #161d26; --ink: #e5eaf1; --muted: #9aa5b4; --line: #2a3340; --soft: #1c2430;
+  --base: #9eb0c6; --rhcsa: #ff7a70; --rhce: #f2a640; --cka: #85a8ff; --accent: #3cc4b3; --accent-ink: #062521;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.7;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface);
+}
+a { color: inherit; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); text-underline-offset: 3px; }
+a:hover { text-decoration-color: currentColor; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.25; text-wrap: balance; margin: 0; }
+h2 { font-size: var(--step-2); font-weight: 700; }
+h3 { font-size: var(--step-1); font-weight: 600; }
+p { margin: 0; }
+code, .mono { font-family: var(--font-mono); font-size: 0.88em; }
+
+.wrap {
+  max-width: 1080px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.eyebrow {
+  font-family: var(--font-mono); font-size: var(--step--1); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.muted { color: var(--muted); }
+.t-base { --t: var(--base); } .t-rhcsa { --t: var(--rhcsa); } .t-rhce { --t: var(--rhce); } .t-cka { --t: var(--cka); }
+
+/* Header */
+header.top { background: var(--surface); border-bottom: 1px solid var(--line); }
+header.top .wrap { padding-block: 40px 28px; display: grid; gap: 18px; }
+.lead { max-width: 62ch; color: var(--muted); font-size: var(--step-1); }
+.route { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; font-family: var(--font-display); font-weight: 600; font-size: var(--step-1); }
+.route .stop { display: inline-flex; align-items: baseline; gap: 8px; padding: 4px 12px; border: 1.5px solid var(--t); color: var(--t); border-radius: 999px; }
+.route .stop small { font-family: var(--font-mono); font-weight: 400; font-size: var(--step--1); }
+.route .arrow { color: var(--muted); }
+.controls { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; font-size: var(--step--1); color: var(--muted); }
+.controls label { display: inline-flex; gap: 8px; align-items: center; }
+.controls input, .controls select {
+  font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 4px 8px;
+}
+.overall { display: grid; gap: 6px; max-width: 520px; }
+.bar { height: 8px; background: var(--soft); border-radius: 999px; overflow: hidden; }
+.bar > span { display: block; height: 100%; width: 0; background: var(--accent); transition: width .3s ease; }
+.overall-text { font-family: var(--font-mono); font-size: var(--step--1); color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* Sticky nav */
+nav.jump { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+nav.jump .wrap { display: flex; gap: 4px 18px; overflow-x: auto; padding-block: 10px; scrollbar-width: none; }
+nav.jump a { white-space: nowrap; text-decoration: none; font-size: var(--step--1); color: var(--muted); }
+nav.jump a:hover { color: var(--ink); }
+
+main .wrap { display: grid; gap: 56px; padding-block: 40px 72px; }
+section { display: grid; gap: 18px; scroll-margin-top: 56px; }
+.section-head { display: grid; gap: 6px; }
+.section-head p { color: var(--muted); max-width: 68ch; }
+
+/* Timeline */
+.timeline { display: grid; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+.weeks { display: grid; grid-template-columns: repeat(24, minmax(14px, 1fr)); gap: 3px; min-width: 360px; }
+.wk { position: relative; height: 34px; border-radius: 3px; background: color-mix(in srgb, var(--t) 22%, var(--surface)); border: 1px solid color-mix(in srgb, var(--t) 35%, transparent); text-decoration: none; display: grid; place-items: end center; font-family: var(--font-mono); font-size: 10px; color: var(--muted); padding-bottom: 2px; }
+.wk.done { background: var(--t); color: var(--surface); }
+.wk.is-exam::after { content: ""; position: absolute; top: -7px; left: 50%; width: 9px; height: 9px; transform: translateX(-50%) rotate(45deg); background: var(--t); border: 2px solid var(--surface); }
+.wk.now { outline: 2px solid var(--ink); outline-offset: 1px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: var(--step--1); color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 12px; height: 12px; border-radius: 3px; background: var(--t); display: inline-block; }
+.legend .diamond { width: 9px; height: 9px; border-radius: 0; transform: rotate(45deg); background: var(--ink); }
+.now-line { font-size: var(--step--1); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* Exam cards */
+.exams { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.exam { background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--t); border-radius: var(--radius); padding: 18px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.exam h3 { color: var(--t); display: flex; justify-content: space-between; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.exam h3 small { font-family: var(--font-mono); font-weight: 500; font-size: var(--step--1); color: var(--muted); }
+.exam dl { margin: 0; display: grid; grid-template-columns: 5.5em 1fr; gap: 6px 10px; font-size: var(--step--1); }
+.exam dt { color: var(--muted); }
+.exam dd { margin: 0; min-width: 0; }
+.exam .when { font-family: var(--font-mono); font-size: var(--step--1); color: var(--muted); }
+.note-box { font-size: var(--step--1); color: var(--muted); border-left: 3px solid var(--line); padding: 4px 0 4px 12px; max-width: 80ch; }
+
+/* Why order */
+.why { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px 28px; }
+.why div { display: grid; gap: 4px; }
+.why b { font-family: var(--font-display); font-size: var(--step-1); }
+
+/* Weekly plan */
+.phase { display: grid; gap: 12px; }
+.phase-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; border-bottom: 2px solid var(--t); padding-bottom: 8px; }
+.phase-head h3 { color: var(--t); font-size: var(--step-2); }
+.phase-head .meta { font-family: var(--font-mono); font-size: var(--step--1); color: var(--muted); font-variant-numeric: tabular-nums; }
+.phase-head p { flex-basis: 100%; color: var(--muted); max-width: 70ch; }
+.week { display: grid; grid-template-columns: 76px 1fr; gap: 0 18px; padding: 14px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 60px; }
+.week:last-child { border-bottom: 0; }
+.week.now { background: color-mix(in srgb, var(--accent) 7%, transparent); box-shadow: inset 3px 0 0 var(--accent); }
+.week-no { font-family: var(--font-mono); color: var(--t); font-weight: 500; padding-left: 8px; }
+.week-no small { display: block; color: var(--muted); font-weight: 400; font-size: 11px; }
+.week-body { display: grid; gap: 8px; min-width: 0; }
+.week-title { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+.week-title h4 { margin: 0; font-family: var(--font-display); font-size: var(--step-1); font-weight: 600; }
+.week-title .hrs { font-family: var(--font-mono); font-size: var(--step--1); color: var(--muted); }
+.tag-exam { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; color: var(--surface); background: var(--t); padding: 1px 7px; border-radius: 3px; }
+ul.tasks { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+ul.tasks li { display: grid; grid-template-columns: 20px 1fr; gap: 8px; align-items: start; }
+ul.tasks input { margin: 5px 0 0; accent-color: var(--accent); width: 15px; height: 15px; }
+ul.tasks label { min-width: 0; }
+ul.tasks .kind { font-family: var(--font-mono); font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 3px; padding: 0 5px; margin-right: 6px; white-space: nowrap; }
+ul.tasks li.checked label { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+.checkpoint { font-size: var(--step--1); color: var(--muted); }
+.checkpoint b { color: var(--ink); font-weight: 500; }
+
+/* Explorer */
+.explorer { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+.lanes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.lane { display: grid; gap: 6px; align-content: start; }
+.lane h4 { margin: 0 0 4px; font-family: var(--font-display); font-size: var(--step-0); color: var(--t); border-bottom: 2px solid var(--t); padding-bottom: 4px; }
+.node { all: unset; box-sizing: border-box; cursor: pointer; display: grid; grid-template-columns: 2.6em 1fr; gap: 6px; padding: 5px 8px; border-radius: 4px; border: 1px solid var(--line); background: var(--surface); font-size: var(--step--1); line-height: 1.45; }
+.node .nid { font-family: var(--font-mono); color: var(--t); }
+.node:hover { border-color: var(--t); }
+.node:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.node.sel { background: var(--t); border-color: var(--t); color: var(--surface); }
+.node.sel .nid { color: var(--surface); }
+.node.pre { border: 1.5px dashed var(--t); }
+.node.nxt { border: 1.5px solid var(--t); box-shadow: 0 0 0 2px color-mix(in srgb, var(--t) 18%, transparent); }
+.node.rel { border: 1.5px dotted var(--t); }
+.lanes.focus .node:not(.sel):not(.pre):not(.nxt):not(.rel) { opacity: .38; }
+.detail { position: sticky; top: 64px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; gap: 12px; min-width: 0; }
+.detail h4 { margin: 0; font-family: var(--font-display); font-size: var(--step-1); color: var(--t); }
+.detail .group { display: grid; gap: 6px; }
+.detail .group > span { font-size: var(--step--1); color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { all: unset; box-sizing: border-box; cursor: pointer; font-size: var(--step--1); border: 1px solid var(--t); color: var(--t); border-radius: 999px; padding: 1px 9px; }
+.chip:focus-visible { outline: 2px solid var(--accent); }
+.open-note { display: inline-block; text-decoration: none; background: var(--accent); color: var(--accent-ink); padding: 6px 12px; border-radius: var(--radius); font-size: var(--step--1); font-weight: 500; }
+.key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: var(--step--1); color: var(--muted); }
+.key span { display: inline-flex; gap: 6px; align-items: center; }
+.key i { width: 18px; height: 12px; border-radius: 3px; display: inline-block; border: 1.5px solid var(--muted); }
+.key i.d { border-style: dashed; } .key i.o { border-style: dotted; }
+
+/* CKA weights */
+.weights { display: grid; gap: 10px; }
+.wbar { display: flex; height: 34px; border-radius: 4px; overflow: hidden; border: 1px solid var(--line); }
+.wbar div { display: grid; place-items: center; font-family: var(--font-mono); font-size: 12px; color: var(--surface); background: color-mix(in srgb, var(--cka) calc(var(--o) * 1%), var(--base)); min-width: 0; overflow: hidden; white-space: nowrap; }
+.wrows { display: grid; gap: 6px; }
+.wrow { display: grid; grid-template-columns: 3.2em minmax(0, 15em) 1fr; gap: 10px; font-size: var(--step--1); align-items: baseline; }
+.wrow .pct { font-family: var(--font-mono); color: var(--cka); font-variant-numeric: tabular-nums; }
+.wrow .links { color: var(--muted); min-width: 0; }
+
+/* Habits & resources */
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+.cols ol, .cols ul { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; }
+.rhythm { display: grid; gap: 4px; font-size: var(--step--1); }
+.rhythm div { display: grid; grid-template-columns: 5.5em 1fr; gap: 10px; padding: 6px 0; border-bottom: 1px dashed var(--line); }
+.rhythm div span:first-child { font-family: var(--font-mono); color: var(--accent); }
+table.res { width: 100%; border-collapse: collapse; font-size: var(--step--1); }
+table.res th, table.res td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.res th { font-weight: 500; color: var(--muted); }
+.table-scroll { overflow-x: auto; }
+footer { border-top: 1px solid var(--line); }
+footer .wrap { padding-block: 24px 40px; font-size: var(--step--1); color: var(--muted); display: grid; gap: 6px; }
+
+@media (max-width: 860px) {
+  .explorer { grid-template-columns: 1fr; }
+  .detail { position: static; order: -1; }
+  .lanes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .week { grid-template-columns: 1fr; gap: 6px; }
+  .week-no { padding-left: 4px; }
+  .week-no small { display: inline; margin-left: 8px; }
+  .lanes { grid-template-columns: 1fr; }
+  .wrow { grid-template-columns: 3.2em 1fr; }
+  .wrow .links { grid-column: 2; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <span class="eyebrow">个人备考路线 · 24 周 · 2026–2027</span>
+    <h1 style="font-size: var(--step-3); font-weight: 700;">RHCSA → RHCE → CKA 学习路线</h1>
+    <div class="route" aria-label="考试顺序">
+      <span class="stop t-rhcsa">RHCSA <small>EX200 · 第 10 周</small></span><span class="arrow">→</span>
+      <span class="stop t-rhce">RHCE <small>EX294 · 第 16 周</small></span><span class="arrow">→</span>
+      <span class="stop t-cka">CKA <small>第 24 周</small></span>
+    </div>
+    <p class="lead">起点：用过 Ubuntu 和 Docker / Compose，没碰过 RHEL。先用 2 周把环境和基本功补齐，再按「Linux 管理 → 用 Ansible 自动化它 → 上 Kubernetes 运维集群」的顺序推进。每周 12~15 小时。</p>
+    <div class="overall">
+      <div class="bar" aria-hidden="true"><span id="overall-bar"></span></div>
+      <div class="overall-text" id="overall-text">进度 0 / 0</div>
+    </div>
+    <div class="controls">
+      <label for="start-date">开始日期 <input type="date" id="start-date" value="2026-11-09"></label>
+      <label for="link-mode">链接打开方式
+        <select id="link-mode">
+          <option value="auto">自动</option>
+          <option value="github">GitHub 网页</option>
+          <option value="local">本地文件</option>
+        </select>
+      </label>
+      <button type="button" id="reset" style="font: inherit; color: var(--muted); background: none; border: 1px solid var(--line); border-radius: var(--radius); padding: 3px 10px; cursor: pointer;">清空勾选</button>
+      <span id="reset-confirm" hidden>
+        <button type="button" id="reset-yes" style="font: inherit; color: var(--accent-ink); background: var(--accent); border: 0; border-radius: var(--radius); padding: 3px 10px; cursor: pointer;">确认清空</button>
+        <button type="button" id="reset-no" style="font: inherit; color: var(--muted); background: none; border: 0; cursor: pointer;">取消</button>
+      </span>
+    </div>
+  </div>
+</header>
+
+<nav class="jump" aria-label="页面目录">
+  <div class="wrap">
+    <a href="#timeline">时间轴</a>
+    <a href="#exams">三门考试</a>
+    <a href="#plan">逐周计划</a>
+    <a href="#network">知识网络</a>
+    <a href="#weights">CKA 权重</a>
+    <a href="#habits">方法与考场</a>
+    <a href="#resources">资料入口</a>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap">
+
+    <section id="timeline">
+      <div class="section-head">
+        <h2>24 周时间轴</h2>
+        <p>每格一周，颜色代表阶段；菱形是考试周。改上面的开始日期，会标出今天所在的周和三次考试的大致日期。点格子跳到那一周的计划。</p>
+      </div>
+      <div class="timeline">
+        <div class="weeks" id="weeks"></div>
+      </div>
+      <div class="legend">
+        <span class="t-base"><i></i>准备</span>
+        <span class="t-rhcsa"><i></i>RHCSA</span>
+        <span class="t-rhce"><i></i>RHCE</span>
+        <span class="t-cka"><i></i>CKA</span>
+        <span><i class="diamond"></i>考试周</span>
+      </div>
+      <p class="now-line" id="now-line"></p>
+    </section>
+
+    <section id="exams">
+      <div class="section-head">
+        <h2>三门考试</h2>
+        <p>三门都是上机实操，没有选择题。下面的信息整理自 2026 年 11 月能查到的资料，红帽在 2026 年 5 月调整过认证体系，报名前请再核对一次官方页面。</p>
+      </div>
+      <div class="exams">
+        <article class="exam t-rhcsa">
+          <h3>RHCSA <small>EX200</small></h3>
+          <dl>
+            <dt>版本</dt><dd>RHEL 10</dd>
+            <dt>时长</dt><dd>约 3 小时，在 2 台机器上完成配置任务</dd>
+            <dt>及格</dt><dd>210 / 300</dd>
+            <dt>考场文档</dt><dd>只有本机 <code>man</code>、<code>--help</code>、<code>/usr/share/doc</code></dd>
+            <dt>重点</dt><dd>存储/LVM、SELinux、网络、systemd，所有配置重启后必须仍然生效</dd>
+            <dt>有效期</dt><dd>3 年</dd>
+          </dl>
+          <span class="when" id="when-rhcsa"></span>
+          <a href="https://www.redhat.com/en/services/training/ex200-red-hat-certified-system-administrator-rhcsa-exam" target="_blank" rel="noopener">官方考纲 ↗</a>
+        </article>
+        <article class="exam t-rhce">
+          <h3>RHCE <small>EX294</small></h3>
+          <dl>
+            <dt>版本</dt><dd>配套课程 AU294 基于 RHEL 10、ansible-core 2.16、AAP 2.6</dd>
+            <dt>时长</dt><dd>约 4 小时，写 playbook 管理一组受管节点</dd>
+            <dt>及格</dt><dd>210 / 300</dd>
+            <dt>考场文档</dt><dd>本机文档 + <code>ansible-doc</code> / <code>ansible-navigator doc</code></dd>
+            <dt>前置</dt><dd>持有有效 RHCSA 才能获得 RHCE 证书</dd>
+            <dt>有效期</dt><dd>3 年</dd>
+          </dl>
+          <span class="when" id="when-rhce"></span>
+          <a href="https://www.redhat.com/en/services/training/ex294-red-hat-certified-engineer-rhce-exam-red-hat-enterprise-linux" target="_blank" rel="noopener">官方考纲 ↗</a>
+        </article>
+        <article class="exam t-cka">
+          <h3>CKA <small>Linux Foundation</small></h3>
+          <dl>
+            <dt>版本</dt><dd>考纲 v1.37（仓库里有 PDF）</dd>
+            <dt>时长</dt><dd>2 小时，在线监考，在多个集群间切换 context 答题</dd>
+            <dt>及格</dt><dd>66%</dd>
+            <dt>考场文档</dt><dd>浏览器里可开 kubernetes.io/docs 等官方文档</dd>
+            <dt>附赠</dt><dd>1 次免费重考、2 次 killer.sh 模拟环境</dd>
+            <dt>有效期</dt><dd>2 年</dd>
+          </dl>
+          <span class="when" id="when-cka"></span>
+          <a href="https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/" target="_blank" rel="noopener">官方页面 ↗</a>
+        </article>
+      </div>
+      <p class="note-box">时长、及格线、附赠权益都以报名时官网为准。考纲原文：<a data-path="references/cka/CKA_Curriculum_v1.37.pdf">CKA 考纲 PDF</a>；红帽考纲在仓库各轨道的 README 里整理成了「考纲条目 → 笔记」对照表（<a data-path="notes/rhcsa/README.md">RHCSA</a> · <a data-path="notes/rhce/README.md">RHCE</a> · <a data-path="notes/cka/README.md">CKA</a>）。</p>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>为什么按这个顺序</h2>
+      </div>
+      <div class="why">
+        <div><b class="t-rhcsa" style="color: var(--t)">RHCSA 是地基</b><p class="muted">RHCE 必须先有 RHCSA。你缺的是 RHEL 生态（dnf、firewalld、SELinux、NetworkManager），不是 Linux 本身，8 周足够补上。</p></div>
+        <div><b class="t-rhce" style="color: var(--t)">RHCE 紧跟着考</b><p class="muted">EX294 本质是「用 Ansible 做一遍 RHCSA 的操作」。两门连着考，第二门大约一半的知识是现成的。</p></div>
+        <div><b class="t-cka" style="color: var(--t)">CKA 放最后</b><p class="muted">CKA 有 30% 是排错，靠的是 systemd、journalctl、网络、证书这些 Linux 基本功。你已有 Docker 经验，容器概念不会卡住你。</p></div>
+      </div>
+    </section>
+
+    <section id="plan">
+      <div class="section-head">
+        <h2>逐周计划</h2>
+        <p>每周列出要学的知识节点、要做的实验和本周的「过关标准」。勾选会保存在这个浏览器里。时间紧可以把每个阶段压缩 20%，但别砍掉动手实验和模拟考。</p>
+      </div>
+      <div id="phases" style="display: grid; gap: 40px;"></div>
+    </section>
+
+    <section id="network">
+      <div class="section-head">
+        <h2>知识网络</h2>
+        <p>44 个知识节点，每个对应 <a data-path="notes/README.md">notes/</a> 里的一篇笔记。点一个节点，会高亮它的前置、后续和跨考试的关联，右侧可以直接打开笔记。</p>
+      </div>
+      <div class="key">
+        <span><i class="d"></i>前置（先学）</span>
+        <span><i></i>后续（接着学）</span>
+        <span><i class="o"></i>类比 / 关联</span>
+      </div>
+      <div class="explorer">
+        <div class="lanes" id="lanes"></div>
+        <aside class="detail" id="detail" aria-live="polite"></aside>
+      </div>
+    </section>
+
+    <section id="weights">
+      <div class="section-head">
+        <h2>CKA 考纲权重</h2>
+        <p>按 v1.37 考纲。排错占 30%，但它不是单独一块知识，而是前面所有节点的综合应用，所以排在最后学、贯穿全程练。</p>
+      </div>
+      <div class="weights">
+        <div class="wbar" id="wbar" role="img" aria-label="CKA 五个领域的权重：集群架构 25%，工作负载与调度 15%，服务与网络 20%，存储 10%，排错 30%"></div>
+        <div class="wrows" id="wrows"></div>
+      </div>
+    </section>
+
+    <section id="habits">
+      <div class="section-head">
+        <h2>学习方法与考场习惯</h2>
+      </div>
+      <div class="cols">
+        <div style="display: grid; gap: 10px;">
+          <h3>一天 90 分钟怎么用</h3>
+          <div class="rhythm">
+            <div><span>15 min</span><span>翻 <a data-path="journal/mistakes.md">错题本</a>，把昨天做错的题重做一遍</span></div>
+            <div><span>40 min</span><span>读一个知识节点：只读核心概念和必会操作，读不懂的去 references/ 查官方原文</span></div>
+            <div><span>35 min</span><span>在虚拟机里做对应练习，做完重启再验证一次</span></div>
+          </div>
+          <p class="muted" style="font-size: var(--step--1);">周末：半天做本周所有练习的复盘，半天计时做一组跨知识点的题。</p>
+        </div>
+        <div style="display: grid; gap: 10px;">
+          <h3>RHCSA / RHCE 考场</h3>
+          <ul>
+            <li>每做完一题就验证，全部做完<strong>重启两台机器</strong>再检查一遍。</li>
+            <li>平时就只用 <code>man -k</code>、<code>man 5 xxx</code>、<code>/usr/share/doc</code>、<code>ansible-doc</code> 查资料，不用搜索引擎。</li>
+            <li>root 密码重置、LVM 扩容、SELinux 上下文这些高频操作，练到不用想。</li>
+            <li>Ansible 题先写 inventory 和 ansible.cfg，用 <code>--syntax-check</code> 和 <code>-C</code> 先试跑。</li>
+          </ul>
+        </div>
+        <div style="display: grid; gap: 10px;">
+          <h3>CKA 考场</h3>
+          <ul>
+            <li>每题开头先执行题目给的 <code>kubectl config use-context</code>，切错集群整题白做。</li>
+            <li>能用命令生成就不手写 YAML：<code>kubectl create … --dry-run=client -o yaml</code>。</li>
+            <li>先做分值高、有把握的题，卡住 5 分钟就标记跳过。</li>
+            <li>熟悉 kubernetes.io 文档的目录结构，知道 NetworkPolicy、PV、etcd 备份的示例在哪一页。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="resources">
+      <div class="section-head">
+        <h2>资料入口</h2>
+        <p>仓库里的资料都来自官方：考纲 PDF 来自 CNCF，文档原文来自 Kubernetes、Helm、Ansible 的官方 GitHub 仓库。RHEL 手册需要在你自己电脑上运行脚本下载。</p>
+      </div>
+      <div class="table-scroll">
+        <table class="res">
+          <thead><tr><th>资料</th><th>用途</th><th>位置</th></tr></thead>
+          <tbody>
+            <tr><td>CKA 考纲 v1.37</td><td>CKA 唯一权威范围</td><td><a data-path="references/cka/CKA_Curriculum_v1.37.pdf">references/cka/</a></td></tr>
+            <tr><td>kubernetes.io 文档原文</td><td>CKA 考场唯一能看的文档，提前熟悉目录</td><td><a data-path="references/cka/kubernetes-docs/">kubernetes-docs/</a></td></tr>
+            <tr><td>Helm、Gateway API 文档</td><td>CKA 新增考点</td><td><a data-path="references/cka/helm-docs/">helm-docs/</a> · <a data-path="references/cka/gateway-api-docs/">gateway-api-docs/</a></td></tr>
+            <tr><td>Ansible 用户文档</td><td>RHCE 的 playbook、变量、循环、vault、collections</td><td><a data-path="references/rhce/ansible-docs/">ansible-docs/</a></td></tr>
+            <tr><td>ansible-navigator 文档</td><td>RHCE 考纲要求的执行工具</td><td><a data-path="references/rhce/ansible-navigator-docs/">ansible-navigator-docs/</a></td></tr>
+            <tr><td>RHEL System Roles 说明</td><td>RHCE 的 system roles 用法</td><td><a data-path="references/rhce/rhel-system-roles-upstream/">rhel-system-roles-upstream/</a></td></tr>
+            <tr><td>RHEL 10 官方手册 PDF</td><td>RHCSA 每个知识点的官方原文</td><td>运行 <a data-path="scripts/fetch-rhel-docs.sh"><code>scripts/fetch-rhel-docs.sh</code></a></td></tr>
+            <tr><td>资料清单与许可证</td><td>每份资料的来源仓库、commit、许可证</td><td><a data-path="references/README.md">references/README.md</a></td></tr>
+            <tr><td>免费正版 RHEL</td><td>Red Hat Developer Subscription，可装 16 台</td><td><a href="https://developers.redhat.com/products/rhel/download" target="_blank" rel="noopener">developers.redhat.com ↗</a></td></tr>
+            <tr><td>killer.sh</td><td>买 CKA 附赠的 2 次模拟考，最后两周用</td><td><a href="https://killer.sh/" target="_blank" rel="noopener">killer.sh ↗</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>仓库：<a href="https://github.com/guiguisocute/RHCE-CKA" target="_blank" rel="noopener">guiguisocute/RHCE-CKA</a> · 路线制定于 2026-11-05</span>
+    <span>勾选进度只保存在当前浏览器。换设备时以仓库里的 journal/ 周记为准。</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var GH = "https://github.com/guiguisocute/RHCE-CKA/blob/main/";
+  var STORE = "rhce-cka-roadmap-v1";
+
+  function load() { try { return JSON.parse(localStorage.getItem(STORE)) || {}; } catch (e) { return {}; } }
+  function save() { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) { /* 浏览器禁用了存储时忽略 */ } }
+  var state = load();
+  state.done = state.done || {};
+
+  /* ---------- 知识节点 ---------- */
+  var TRACKS = [
+    { id: "base", name: "公共基础", cls: "t-base" },
+    { id: "rhcsa", name: "RHCSA · EX200", cls: "t-rhcsa" },
+    { id: "rhce", name: "RHCE · EX294", cls: "t-rhce" },
+    { id: "cka", name: "CKA", cls: "t-cka" }
+  ];
+  var N = {};
+  function node(id, track, title, path) { N[id] = { id: id, track: track, title: title, path: path, pre: [], nxt: [], rel: [] }; }
+  var F = "notes/00-foundations/", S = "notes/rhcsa/", E = "notes/rhce/", K = "notes/cka/";
+  node("F1", "base", "Ubuntu → RHEL 对照", F + "01-ubuntu-to-rhel.md");
+  node("F2", "base", "systemd 与 journald", F + "02-systemd-journald.md");
+  node("F3", "base", "网络基础", F + "03-networking-basics.md");
+  node("F4", "base", "YAML 语法", F + "04-yaml.md");
+  node("F5", "base", "Docker → Podman → K8s", F + "05-containers-docker-to-k8s.md");
+  node("F6", "base", "TLS / PKI 基础", F + "06-tls-pki-basics.md");
+  node("F7", "base", "vim / tmux / 考场效率", F + "07-vim-tmux-exam-efficiency.md");
+  node("S1", "rhcsa", "基础工具", S + "01-essential-tools.md");
+  node("S2", "rhcsa", "Shell 脚本", S + "02-shell-scripting.md");
+  node("S3", "rhcsa", "运行中的系统", S + "03-operate-running-systems.md");
+  node("S4", "rhcsa", "本地存储与 LVM", S + "04-local-storage-lvm.md");
+  node("S5", "rhcsa", "文件系统 / NFS / autofs", S + "05-file-systems-nfs-autofs.md");
+  node("S6", "rhcsa", "软件、计划任务、时间、引导", S + "06-software-scheduling-boot.md");
+  node("S7", "rhcsa", "网络配置 nmcli", S + "07-networking-nmcli.md");
+  node("S8", "rhcsa", "用户、组与 sudo", S + "08-users-groups-sudo.md");
+  node("S9", "rhcsa", "防火墙与 SELinux", S + "09-security-firewalld-selinux.md");
+  node("S10", "rhcsa", "Podman 容器", S + "10-containers-podman.md");
+  node("E1", "rhce", "Ansible 架构与安装", E + "01-ansible-architecture.md");
+  node("E2", "rhce", "Inventory 与 ansible.cfg", E + "02-inventory-and-config.md");
+  node("E3", "rhce", "Ad-hoc、模块与 ansible-doc", E + "03-adhoc-modules-docs.md");
+  node("E4", "rhce", "Playbook 基础", E + "04-playbooks.md");
+  node("E5", "rhce", "变量与 facts", E + "05-variables-facts.md");
+  node("E6", "rhce", "循环、条件、handler、错误处理", E + "06-loops-conditions-errors.md");
+  node("E7", "rhce", "Jinja2 模板", E + "07-jinja2-templates.md");
+  node("E8", "rhce", "Roles", E + "08-roles.md");
+  node("E9", "rhce", "Collections 与 navigator", E + "09-collections-navigator.md");
+  node("E10", "rhce", "Ansible Vault", E + "10-vault.md");
+  node("E11", "rhce", "自动化 RHCSA 任务", E + "11-automate-rhcsa-tasks.md");
+  node("E12", "rhce", "RHEL System Roles", E + "12-rhel-system-roles.md");
+  node("K1", "cka", "集群架构与组件", K + "01-architecture.md");
+  node("K2", "cka", "kubectl 高效操作", K + "02-kubectl-efficiency.md");
+  node("K3", "cka", "kubeadm 搭建集群", K + "03-kubeadm-install.md");
+  node("K4", "cka", "升级与 etcd 备份恢复", K + "04-cluster-lifecycle.md");
+  node("K5", "cka", "高可用控制平面", K + "05-ha-control-plane.md");
+  node("K6", "cka", "RBAC 与 ServiceAccount", K + "06-rbac.md");
+  node("K7", "cka", "Helm 与 Kustomize", K + "07-helm-kustomize.md");
+  node("K8", "cka", "CNI/CSI/CRI、CRD 与 Operator", K + "08-extension-interfaces-crd.md");
+  node("K9", "cka", "工作负载与 HPA", K + "09-workloads.md");
+  node("K10", "cka", "调度：资源、亲和性、污点", K + "10-scheduling.md");
+  node("K11", "cka", "Service 与 CoreDNS", K + "11-services-dns.md");
+  node("K12", "cka", "NetworkPolicy", K + "12-network-policy.md");
+  node("K13", "cka", "Ingress 与 Gateway API", K + "13-ingress-gateway-api.md");
+  node("K14", "cka", "存储 PV/PVC/StorageClass", K + "14-storage.md");
+  node("K15", "cka", "排错（30%）", K + "15-troubleshooting.md");
+
+  /* 与 notes/README.md 全局地图一致：a → b 表示 a 是 b 的前置 */
+  var EDGES = "F1>S1 F2>S3 F3>S7 F4>E4 F4>K2 F5>S10 S10>K1 F6>K4 F6>K6 F7>S1 " +
+    "S1>S2 S1>S3 S1>S4 S4>S5 S3>S6 S1>S7 S1>S8 S7>S9 S8>S9 S9>S10 " +
+    "E1>E2 E2>E3 E3>E4 E4>E5 E5>E6 E6>E7 E6>E8 E8>E9 E4>E10 E8>E11 E9>E12 " +
+    "S9>E11 S4>E11 S6>E11 S8>E11 " +
+    "K1>K2 K1>K3 K3>K4 K4>K5 K2>K6 K2>K9 K9>K10 K3>K8 K9>K7 K9>K11 K11>K12 K11>K13 K9>K14 K4>K15 K11>K15 K14>K15 " +
+    "S4>K14 S7>K11 S3>K15 S6>K3";
+  EDGES.split(" ").forEach(function (e) { var p = e.split(">"); N[p[0]].nxt.push(p[1]); N[p[1]].pre.push(p[0]); });
+  [["E7", "K7"], ["E8", "K7"], ["F5", "K1"], ["F2", "K15"], ["F3", "K11"], ["S10", "K8"]].forEach(function (r) { N[r[0]].rel.push(r[1]); N[r[1]].rel.push(r[0]); });
+
+  /* ---------- 逐周计划 ---------- */
+  var LAB = { rs: "labs/rhcsa/00-lab-setup.md", rp: "labs/rhcsa/practice-set-1.md", rm: "labs/rhcsa/mock-exam.md",
+              es: "labs/rhce/00-lab-setup.md", ep: "labs/rhce/practice-set-1.md", em: "labs/rhce/mock-exam.md",
+              ks: "labs/cka/00-lab-setup.md", kp: "labs/cka/practice-set-1.md", km: "labs/cka/mock-exam.md" };
+  var PHASES = [
+    { id: "p0", name: "阶段 0 · 准备", track: "base", weeks: [1, 2],
+      intro: "先把实验环境搭起来，把 Ubuntu 的习惯映射到 RHEL，练顺 vim。这两周决定了后面做实验的效率。",
+      plan: [
+        { w: 1, title: "搭实验室，认识 RHEL", hrs: 12, items: [
+          ["lab", "申请 Red Hat 开发者订阅，装好 2 台 RHEL 10 虚拟机并打快照", LAB.rs],
+          ["node", "F1"], ["node", "F7"] ],
+          check: "能用 dnf 装包、用 vim 改配置文件、从一台机器 ssh 到另一台。" },
+        { w: 2, title: "命令行基本功与 systemd", hrs: 13, items: [
+          ["node", "S1"], ["node", "F2"],
+          ["lab", "practice-set-1 的 S1 小节", LAB.rp] ],
+          check: "会用管道和重定向组合 grep/find；能启停服务、设开机自启，用 journalctl 查一个服务的日志。" }
+      ] },
+    { id: "p1", name: "阶段 1 · RHCSA", track: "rhcsa", weeks: [3, 10],
+      intro: "按 EX200 考纲逐块推进。存储和 SELinux 是失分大户，各给足一整周。",
+      plan: [
+        { w: 3, title: "Shell 脚本与运行中的系统", hrs: 14, items: [
+          ["node", "S2"], ["node", "S3"], ["lab", "S2、S3 小节练习，重点：重置 root 密码", LAB.rp] ],
+          check: "10 分钟内完成一次 root 密码重置；会切换默认 target；会调 tuned 配置和进程优先级。" },
+        { w: 4, title: "本地存储与 LVM", hrs: 14, items: [
+          ["node", "S4"], ["lab", "S4 小节：分区、PV/VG/LV、扩容、swap", LAB.rp] ],
+          check: "给虚拟机加一块盘，从分区到挂载可用的 LV 一气呵成，扩容后文件系统大小正确，重启不丢。" },
+        { w: 5, title: "文件系统、NFS 与 autofs", hrs: 13, items: [
+          ["node", "S5"], ["lab", "S5 小节：fstab、NFS 客户端、autofs、SGID 协作目录", LAB.rp] ],
+          check: "fstab 用 UUID 挂载；autofs 访问即挂载；写错 fstab 也知道怎么从 emergency 模式救回来。" },
+        { w: 6, title: "软件、Flatpak、计划任务、时间、引导", hrs: 13, items: [
+          ["node", "S6"], ["lab", "S6 小节：本地 dnf 仓库、Flatpak、cron/at/timer、chrony、内核参数", LAB.rp] ],
+          check: "能配好本地仓库装包；会写 cron 和 systemd timer；chronyc sources 显示同步。" },
+        { w: 7, title: "网络与用户", hrs: 14, items: [
+          ["node", "F3"], ["node", "S7"], ["node", "S8"], ["lab", "S7、S8 小节", LAB.rp] ],
+          check: "用 nmcli 配静态 IP/网关/DNS 和主机名；建用户、组、密码策略、sudo 规则，全部重启后有效。" },
+        { w: 8, title: "防火墙与 SELinux", hrs: 15, items: [
+          ["node", "S9"], ["lab", "S9 小节：端口放行、文件上下文、端口标签、布尔值", LAB.rp] ],
+          check: "Web 服务换到非标准端口和目录后，能靠 semanage + restorecon + firewall-cmd 让它重新可访问，且不关 SELinux。" },
+        { w: 9, title: "容器与总复习", hrs: 14, items: [
+          ["node", "F5"], ["node", "S10"], ["lab", "把 practice-set-1 剩下的题全部做完", LAB.rp] ],
+          check: "practice-set-1 每题都能独立完成；错题本里的题重做一遍全对。" },
+        { w: 10, title: "模拟考，然后考 EX200", hrs: 12, exam: "RHCSA", items: [
+          ["lab", "计时做 mock-exam，评分后复盘", LAB.rm],
+          ["todo", "第二次计时模拟（打乱题目顺序重做）"],
+          ["todo", "预约并参加 EX200"] ],
+          check: "模拟考 3 小时内完成且自评 ≥ 80%，再去考。" }
+      ] },
+    { id: "p2", name: "阶段 2 · RHCE", track: "rhce", weeks: [11, 16],
+      intro: "趁 RHCSA 的知识还热，用 Ansible 把它们自动化一遍。每学一个模块，就回想它对应的手工操作。",
+      plan: [
+        { w: 11, title: "Ansible 起步", hrs: 13, items: [
+          ["lab", "1 台控制节点 + 3 台受管节点，配好免密和 sudo", LAB.es],
+          ["node", "F4"], ["node", "E1"], ["node", "E2"], ["node", "E3"] ],
+          check: "ansible all -m ping 全绿；不查网页，只用 ansible-doc 找到 user 模块的参数和示例。" },
+        { w: 12, title: "Playbook 与变量", hrs: 13, items: [
+          ["node", "E4"], ["node", "E5"], ["lab", "E4、E5 小节练习", LAB.ep] ],
+          check: "能写多 play 的 playbook；说清变量优先级的常用几层；会用 register 和 facts 做判断。" },
+        { w: 13, title: "流程控制与模板", hrs: 14, items: [
+          ["node", "E6"], ["node", "E7"], ["lab", "E6、E7 小节练习", LAB.ep] ],
+          check: "loop + when + block/rescue + handler 组合写出一个可重复执行不报错的 playbook；用模板生成 /etc/hosts。" },
+        { w: 14, title: "Roles、Collections、Vault", hrs: 14, items: [
+          ["node", "E8"], ["node", "E9"], ["node", "E10"], ["lab", "E8~E10 小节练习", LAB.ep] ],
+          check: "能从零建 role、用 requirements.yml 装 role 和 collection；用 ansible-navigator 跑 playbook；vault 加密变量文件并在 playbook 里使用。" },
+        { w: 15, title: "自动化 RHCSA 任务", hrs: 15, items: [
+          ["node", "E11"], ["node", "E12"], ["lab", "practice-set-1 剩余题目", LAB.ep] ],
+          check: "用 playbook 完成：装包、起服务、开防火墙、建 LVM 并挂载、建用户、配 cron、设 SELinux 布尔值。" },
+        { w: 16, title: "模拟考，然后考 EX294", hrs: 12, exam: "RHCE", items: [
+          ["lab", "计时做 mock-exam，评分后复盘", LAB.em],
+          ["todo", "所有 playbook 再跑一遍，确认幂等（第二次 changed=0）"],
+          ["todo", "预约并参加 EX294"] ],
+          check: "模拟考 4 小时内完成，所有 playbook 第二次运行无报错。" }
+      ] },
+    { id: "p3", name: "阶段 3 · CKA", track: "cka", weeks: [17, 24],
+      intro: "先用 kind 练熟 kubectl 和资源对象，再用 kubeadm 亲手搭集群、升级、备份。最后两周专攻排错和模拟考。",
+      plan: [
+        { w: 17, title: "从 Docker 到 Kubernetes", hrs: 13, items: [
+          ["lab", "装 kind 起一个本地集群，配好 kubectl 补全和 alias", LAB.ks],
+          ["node", "F6"], ["node", "K1"], ["node", "K2"] ],
+          check: "能说出每个控制平面组件的作用；用命令（不手写 YAML）创建 Pod、Deployment、Service。" },
+        { w: 18, title: "工作负载与调度", hrs: 14, items: [
+          ["node", "K9"], ["node", "K10"], ["lab", "K9、K10 小节练习", LAB.kp] ],
+          check: "滚动更新和回滚；ConfigMap/Secret 注入；HPA；nodeAffinity、taint/toleration 能按要求把 Pod 调度到指定节点。" },
+        { w: 19, title: "网络：Service、NetworkPolicy、Ingress、Gateway API", hrs: 15, items: [
+          ["node", "K11"], ["node", "K12"], ["node", "K13"], ["lab", "K11~K13 小节练习", LAB.kp] ],
+          check: "写出只允许指定 namespace/label 访问的 NetworkPolicy 并验证；用 Gateway + HTTPRoute 暴露服务。" },
+        { w: 20, title: "存储与 RBAC", hrs: 13, items: [
+          ["node", "K14"], ["node", "K6"], ["lab", "K14、K6 小节练习", LAB.kp] ],
+          check: "PVC 能绑定到 StorageClass 动态供给的卷；给 ServiceAccount 授最小权限并用 kubectl auth can-i 验证。" },
+        { w: 21, title: "亲手搭集群：kubeadm、升级、etcd", hrs: 15, items: [
+          ["lab", "用 3 台 VM 以 kubeadm 搭集群", LAB.ks],
+          ["node", "K3"], ["node", "K4"], ["node", "K5"] ],
+          check: "从零搭出 1 控制平面 + 2 worker 的集群；升级一个小版本；etcd 快照备份并恢复成功。" },
+        { w: 22, title: "Helm、Kustomize 与扩展接口", hrs: 13, items: [
+          ["node", "K7"], ["node", "K8"], ["lab", "K7、K8 小节练习", LAB.kp] ],
+          check: "用 Helm 安装、升级、回滚一个 chart；用 Kustomize overlay 改镜像和副本数；能安装一个 CRD 并创建它的实例。" },
+        { w: 23, title: "排错专项", hrs: 15, items: [
+          ["node", "K15"], ["lab", "practice-set-1 剩余题目，尤其排错小节", LAB.kp],
+          ["todo", "killer.sh 第 1 次模拟（做完逐题看解析）"] ],
+          check: "人为弄坏 kubelet、静态 Pod 清单、Service selector 后，都能在 10 分钟内定位并修好。" },
+        { w: 24, title: "冲刺，然后考 CKA", hrs: 12, exam: "CKA", items: [
+          ["lab", "计时 2 小时做 mock-exam", LAB.km],
+          ["todo", "killer.sh 第 2 次模拟"],
+          ["todo", "预约并参加 CKA（考前检查摄像头、网络、桌面环境）"] ],
+          check: "killer.sh 第二次能在时间内完成大部分题目，再去考。" }
+      ] }
+  ];
+
+  /* ---------- 链接 ---------- */
+  var modeSel = document.getElementById("link-mode");
+  modeSel.value = state.linkMode || "auto";
+  function linkMode() {
+    var m = modeSel.value;
+    if (m === "auto") m = location.protocol === "file:" ? "local" : "github";
+    return m;
+  }
+  function hrefFor(p) { return linkMode() === "local" ? p : GH + p; }
+  function applyLinks(root) {
+    var local = linkMode() === "local";
+    (root || document).querySelectorAll("a[data-path]").forEach(function (a) {
+      a.href = hrefFor(a.getAttribute("data-path"));
+      if (local) { a.removeAttribute("target"); } else { a.target = "_blank"; a.rel = "noopener"; }
+    });
+  }
+  modeSel.addEventListener("change", function () { state.linkMode = modeSel.value; save(); applyLinks(); });
+
+  function el(tag, attrs, children) {
+    var e = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) {
+      if (k === "text") e.textContent = attrs[k];
+      else if (k === "class") e.className = attrs[k];
+      else e.setAttribute(k, attrs[k]);
+    });
+    (children || []).forEach(function (c) { if (c) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return e;
+  }
+  function trackCls(t) { return "t-" + t; }
+
+  /* ---------- 渲染逐周计划 ---------- */
+  var allTasks = [];
+  var phasesBox = document.getElementById("phases");
+  PHASES.forEach(function (ph) {
+    var hrs = ph.plan.reduce(function (s, w) { return s + w.hrs; }, 0);
+    var box = el("div", { class: "phase " + trackCls(ph.track), id: ph.id });
+    box.appendChild(el("div", { class: "phase-head" }, [
+      el("h3", { text: ph.name }),
+      el("span", { class: "meta", text: "第 " + ph.weeks[0] + "–" + ph.weeks[1] + " 周 · 约 " + hrs + " 小时" }),
+      el("p", { text: ph.intro })
+    ]));
+    ph.plan.forEach(function (wk) {
+      var ul = el("ul", { class: "tasks" });
+      wk.items.forEach(function (it, i) {
+        var tid = "w" + wk.w + "-" + i;
+        allTasks.push(tid);
+        var label = el("label", { for: tid });
+        if (it[0] === "node") {
+          var n = N[it[1]];
+          label.appendChild(el("span", { class: "kind", text: "笔记 " + n.id }));
+          label.appendChild(el("a", { "data-path": n.path, text: n.title }));
+        } else if (it[0] === "lab") {
+          label.appendChild(el("span", { class: "kind", text: "实验" }));
+          label.appendChild(el("a", { "data-path": it[2], text: it[1] }));
+        } else {
+          label.appendChild(el("span", { class: "kind", text: "任务" }));
+          label.appendChild(document.createTextNode(it[1]));
+        }
+        var cb = el("input", { type: "checkbox", id: tid });
+        cb.checked = !!state.done[tid];
+        var li = el("li", { class: cb.checked ? "checked" : "" }, [cb, label]);
+        cb.addEventListener("change", function () {
+          if (cb.checked) state.done[tid] = 1; else delete state.done[tid];
+          li.className = cb.checked ? "checked" : "";
+          save(); refreshProgress();
+        });
+        ul.appendChild(li);
+      });
+      var title = el("div", { class: "week-title" }, [
+        el("h4", { text: wk.title }),
+        el("span", { class: "hrs", text: "≈ " + wk.hrs + " h" }),
+        wk.exam ? el("span", { class: "tag-exam", text: "考试周 · " + wk.exam }) : null
+      ]);
+      var cp = el("p", { class: "checkpoint" }, [el("b", { text: "过关标准：" }), wk.check]);
+      var row = el("div", { class: "week", id: "week-" + wk.w }, [
+        el("div", { class: "week-no" }, ["W" + (wk.w < 10 ? "0" : "") + wk.w, el("small", { class: "date", "data-week": String(wk.w) })]),
+        el("div", { class: "week-body" }, [title, ul, cp])
+      ]);
+      box.appendChild(row);
+    });
+    phasesBox.appendChild(box);
+  });
+
+  /* ---------- 时间轴 ---------- */
+  var weeksBox = document.getElementById("weeks");
+  var weekTrack = {}, weekExam = {}, weekTasks = {};
+  PHASES.forEach(function (ph) { ph.plan.forEach(function (wk) {
+    weekTrack[wk.w] = ph.track; if (wk.exam) weekExam[wk.w] = wk.exam;
+    weekTasks[wk.w] = wk.items.map(function (_, i) { return "w" + wk.w + "-" + i; });
+  }); });
+  for (var w = 1; w <= 24; w++) {
+    var a = el("a", { class: "wk " + trackCls(weekTrack[w]) + (weekExam[w] ? " is-exam" : ""), href: "#week-" + w, title: "第 " + w + " 周" + (weekExam[w] ? " · " + weekExam[w] + " 考试" : ""), id: "wk-" + w, text: String(w) });
+    weeksBox.appendChild(a);
+  }
+
+  /* ---------- 日期 ---------- */
+  var startInput = document.getElementById("start-date");
+  if (state.start) startInput.value = state.start;
+  function fmt(d) { return (d.getMonth() + 1) + "/" + d.getDate(); }
+  function fmtFull(d) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+  function refreshDates() {
+    var parts = (startInput.value || "2026-11-09").split("-").map(Number);
+    var start = new Date(parts[0], parts[1] - 1, parts[2]);
+    function weekStart(n) { var d = new Date(start); d.setDate(d.getDate() + (n - 1) * 7); return d; }
+    document.querySelectorAll("small.date").forEach(function (s) { s.textContent = fmt(weekStart(Number(s.getAttribute("data-week")))) + " 起"; });
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var cur = Math.floor((today - start) / (7 * 864e5)) + 1;
+    document.querySelectorAll(".wk.now, .week.now").forEach(function (x) { x.classList.remove("now"); });
+    var line = document.getElementById("now-line");
+    if (cur >= 1 && cur <= 24) {
+      document.getElementById("wk-" + cur).classList.add("now");
+      document.getElementById("week-" + cur).classList.add("now");
+      line.textContent = "今天是第 " + cur + " 周：" + document.querySelector("#week-" + cur + " h4").textContent + "。";
+    } else if (cur < 1) {
+      line.textContent = "距离开始还有 " + Math.ceil((start - today) / 864e5) + " 天。";
+    } else {
+      line.textContent = "24 周计划已结束，按 journal/ 里的记录安排复习。";
+    }
+    [["when-rhcsa", 10], ["when-rhce", 16], ["when-cka", 24]].forEach(function (p) {
+      var d = weekStart(p[1]), e = new Date(d); e.setDate(e.getDate() + 6);
+      document.getElementById(p[0]).textContent = "计划考试周：" + fmtFull(d) + " ~ " + fmt(e);
+    });
+  }
+  startInput.addEventListener("change", function () { state.start = startInput.value; save(); refreshDates(); });
+
+  /* ---------- 进度 ---------- */
+  function refreshProgress() {
+    var done = allTasks.filter(function (t) { return state.done[t]; }).length;
+    document.getElementById("overall-bar").style.width = (allTasks.length ? done / allTasks.length * 100 : 0) + "%";
+    document.getElementById("overall-text").textContent = "进度 " + done + " / " + allTasks.length + " 项（" + Math.round(done / allTasks.length * 100) + "%）";
+    Object.keys(weekTasks).forEach(function (w) {
+      var all = weekTasks[w].every(function (t) { return state.done[t]; });
+      document.getElementById("wk-" + w).classList.toggle("done", all);
+    });
+  }
+  var resetBtn = document.getElementById("reset"), confirmBox = document.getElementById("reset-confirm");
+  resetBtn.addEventListener("click", function () { confirmBox.hidden = false; resetBtn.hidden = true; });
+  document.getElementById("reset-no").addEventListener("click", function () { confirmBox.hidden = true; resetBtn.hidden = false; });
+  document.getElementById("reset-yes").addEventListener("click", function () {
+    state.done = {}; save();
+    document.querySelectorAll("ul.tasks input").forEach(function (c) { c.checked = false; c.closest("li").className = ""; });
+    confirmBox.hidden = true; resetBtn.hidden = false; refreshProgress();
+  });
+
+  /* ---------- 知识网络浏览器 ---------- */
+  var lanes = document.getElementById("lanes"), detail = document.getElementById("detail");
+  var buttons = {};
+  TRACKS.forEach(function (t) {
+    var lane = el("div", { class: "lane " + t.cls }, [el("h4", { text: t.name })]);
+    Object.keys(N).filter(function (k) { return N[k].track === t.id; }).forEach(function (k) {
+      var n = N[k];
+      var b = el("button", { type: "button", class: "node", id: "node-" + k, "aria-pressed": "false" }, [
+        el("span", { class: "nid", text: n.id }), el("span", { text: n.title })
+      ]);
+      b.addEventListener("click", function () {
+        select(k);
+        if (window.matchMedia("(max-width: 860px)").matches) detail.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      });
+      buttons[k] = b; lane.appendChild(b);
+    });
+    lanes.appendChild(lane);
+  });
+  function chipRow(label, ids) {
+    var g = el("div", { class: "group" }, [el("span", { text: label })]);
+    var c = el("div", { class: "chips" });
+    if (!ids.length) c.appendChild(el("span", { class: "muted", text: "无", style: "font-size: var(--step--1)" }));
+    ids.forEach(function (id) {
+      var ch = el("button", { type: "button", class: "chip " + trackCls(N[id].track), text: id + " " + N[id].title });
+      ch.addEventListener("click", function () { select(id); buttons[id].focus({ preventScroll: true }); });
+      c.appendChild(ch);
+    });
+    g.appendChild(c);
+    return g;
+  }
+  function select(k) {
+    var n = N[k];
+    lanes.classList.add("focus");
+    Object.keys(buttons).forEach(function (id) {
+      var b = buttons[id];
+      b.classList.remove("sel", "pre", "nxt", "rel");
+      b.setAttribute("aria-pressed", id === k ? "true" : "false");
+      if (id === k) b.classList.add("sel");
+      else if (n.pre.indexOf(id) >= 0) b.classList.add("pre");
+      else if (n.nxt.indexOf(id) >= 0) b.classList.add("nxt");
+      else if (n.rel.indexOf(id) >= 0) b.classList.add("rel");
+    });
+    var weeksOf = [];
+    PHASES.forEach(function (ph) { ph.plan.forEach(function (wk) { wk.items.forEach(function (it) { if (it[0] === "node" && it[1] === k) weeksOf.push(wk.w); }); }); });
+    detail.className = "detail " + trackCls(n.track);
+    detail.innerHTML = "";
+    detail.appendChild(el("span", { class: "eyebrow", text: TRACKS.filter(function (t) { return t.id === n.track; })[0].name + " · " + n.id }));
+    detail.appendChild(el("h4", { text: n.title }));
+    if (weeksOf.length) detail.appendChild(el("p", { class: "muted", style: "font-size: var(--step--1)" }, ["安排在 ", el("a", { href: "#week-" + weeksOf[0], text: "第 " + weeksOf.join("、") + " 周" })]));
+    detail.appendChild(chipRow("前置", n.pre));
+    detail.appendChild(chipRow("后续", n.nxt));
+    detail.appendChild(chipRow("类比 / 关联", n.rel));
+    var open = el("a", { class: "open-note", "data-path": n.path, text: "打开笔记 →" });
+    detail.appendChild(el("div", {}, [open]));
+    applyLinks(detail);
+    state.node = k; save();
+  }
+
+  /* ---------- CKA 权重 ---------- */
+  var W = [
+    { pct: 25, name: "集群架构、安装与配置", short: "架构", nodes: ["K1", "K3", "K4", "K5", "K6", "K7", "K8"] },
+    { pct: 15, name: "工作负载与调度", short: "工作负载", nodes: ["K9", "K10"] },
+    { pct: 20, name: "服务与网络", short: "网络", nodes: ["K11", "K12", "K13"] },
+    { pct: 10, name: "存储", short: "存储", nodes: ["K14"] },
+    { pct: 30, name: "排错", short: "排错", nodes: ["K15"] }
+  ];
+  var wbar = document.getElementById("wbar"), wrows = document.getElementById("wrows");
+  W.forEach(function (d) {
+    wbar.appendChild(el("div", { style: "flex: " + d.pct + " 1 0; --o: " + (40 + d.pct * 2) , title: d.name + " " + d.pct + "%", text: d.short + " " + d.pct + "%" }));
+    var links = el("span", { class: "links" });
+    d.nodes.forEach(function (id, i) { if (i) links.appendChild(document.createTextNode(" · ")); links.appendChild(el("a", { "data-path": N[id].path, text: id + " " + N[id].title })); });
+    wrows.appendChild(el("div", { class: "wrow" }, [el("span", { class: "pct", text: d.pct + "%" }), el("span", { text: d.name }), links]));
+  });
+
+  applyLinks();
+  refreshDates();
+  refreshProgress();
+  select(state.node && N[state.node] ? state.node : "S4");
+})();
+</script>
+</body>
+</html>
