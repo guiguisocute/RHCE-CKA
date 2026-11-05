@@ -3,7 +3,7 @@
 这里是一个 Go module，放你自己写的 LeetCode 题解和运维小工具。学习路线和知识点见 [`notes/go/`](../notes/go/README.md)。
 
 - module 路径：`github.com/guiguisocute/RHCE-CKA/go`（见 [`go.mod`](go.mod)）
-- `go` 指令写的是 `go 1.24`，表示最低版本。用更新的 Go（例如 1.27）编译也没问题。
+- `go` 指令写的是 `go 1.24`，表示最低版本。用更新的 Go（例如 1.27）编译也没问题。等你在 `tools/` 里引入 client-go、controller-runtime 这类新版依赖时，`go get` 会自动把这一行抬到 `go 1.26`，这是正常现象；本机 Go 低于 1.26 时会按 `GOTOOLCHAIN` 设置自动下载新工具链，所以建议直接装最新稳定版。
 
 ## 目录
 

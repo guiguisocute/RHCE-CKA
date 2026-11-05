@@ -2,7 +2,7 @@
 
 > 配合 [G1 环境、模块与工具链](../../notes/go/01-toolchain-modules.md) 使用。目标：在你自己的电脑（Ubuntu）和实验虚拟机（RHEL 10）上都能 `go build`，并且能本地写 LeetCode 题解、跑测试。
 >
-> 写作时 Go 最新稳定版是 **1.27**（2026 年 8 月发布，见 [`references/go/go-docs/go1.27.md`](../../references/go/go-docs/go1.27.md)）；仓库里的 [`go/go.mod`](../../go/go.mod) 要求 Go ≥ 1.24。
+> 写作时 Go 最新稳定版是 **1.27**（2026 年 8 月发布，见 [`references/go/go-docs/go1.27.md`](../../references/go/go-docs/go1.27.md)）；仓库里的 [`go/go.mod`](../../go/go.mod) 要求 Go ≥ 1.24，但 CKA 阶段要用的新版依赖（client-go v0.37、controller-runtime v0.25、x/crypto v0.58、Prometheus client_golang v1.25）都要求 Go ≥ 1.26，所以**建议直接装最新稳定版**，不要用发行版仓库里偏旧的版本。
 
 ## 1. 装在哪台机器上
 
@@ -140,7 +140,7 @@ printf 'package main\n\nimport (\n\t"fmt"\n\t"os"\n)\n\nfunc main() {\n\th, _ :=
 
 自检清单：
 
-- [ ] `go version` 输出 ≥ 1.24
+- [ ] `go version` 输出 ≥ 1.26（推荐最新稳定版 1.27.x）
 - [ ] `go env GOPROXY` 是你设置的代理
 - [ ] `go test ./leetcode/...` 通过
 - [ ] VS Code 里打开 `solution.go`，鼠标悬停能看到函数说明，保存会自动格式化
