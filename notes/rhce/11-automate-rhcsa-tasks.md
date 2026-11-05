@@ -23,7 +23,7 @@
 | 默认启动 target | `systemctl set-default` | `ansible.builtin.command` + `changed_when`（或 `file` 管理 `default.target` 软链接） | [RHCSA-03](../rhcsa/03-operate-running-systems.md) |
 | 服务启停/开机自启 | `systemctl enable --now` | `ansible.builtin.service`、`ansible.builtin.systemd_service` | [RHCSA-03](../rhcsa/03-operate-running-systems.md) |
 | 重启 | `reboot` | `ansible.builtin.reboot` | [RHCSA-03](../rhcsa/03-operate-running-systems.md) |
-| tuned 性能配置 | `tuned-adm profile` | `ansible.builtin.command` + 判断（无专用内置模块）或 System Role `kernel_settings` | [RHCSA-03](../rhcsa/03-operate-running-systems.md) |
+| tuned 性能配置 | `tuned-adm profile` | `ansible.builtin.command` + `changed_when` 判断（`tuned-adm active` 先查当前 profile；无专用内置模块） | [RHCSA-03](../rhcsa/03-operate-running-systems.md) |
 | 日志持久化 | `/etc/systemd/journald.conf` | `ansible.builtin.lineinfile` / `ini_file` + handler 重启 `systemd-journald` | [RHCSA-03](../rhcsa/03-operate-running-systems.md) |
 | 分区 | `parted`/`fdisk` | `community.general.parted` | [RHCSA-04](../rhcsa/04-local-storage-lvm.md) |
 | PV / VG | `pvcreate`、`vgcreate` | `community.general.lvg` | [RHCSA-04](../rhcsa/04-local-storage-lvm.md) |
