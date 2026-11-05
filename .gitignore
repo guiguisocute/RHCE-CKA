@@ -1,0 +1,10 @@
+# RHEL 官方 PDF 体积较大，默认只保存在本地（如需提交，删除下面这行）
+references/rhel/**/*.pdf
+*.part
+
+# 编辑器 / 系统文件
+.obsidian/workspace*.json
+.obsidian/cache
+.DS_Store
+.vscode/
+*.swp

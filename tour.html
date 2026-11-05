@@ -1,0 +1,1169 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RHCE 与 CKA 考试导览</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+/* Layout: 讲台式分步讲解——左边是画在方格白板上的动画图解，右边是讲解稿，底部固定一条播放控制栏；三条考试轨道沿用学习路线页的颜色。 */
+:root {
+  --paper: #f3f5f8;
+  --surface: #ffffff;
+  --stage: #fbfcfd;
+  --grid: #e7ebf1;
+  --ink: #17202b;
+  --muted: #5b6676;
+  --line: #d6dce5;
+  --base: #55657a;
+  --rhcsa: #b8322b;
+  --rhce: #a86400;
+  --cka: #2c5bc6;
+  --go: #6b4fbf;
+  --ok: #1d7a46;
+  --bad: #c0392b;
+  --accent: #0d7468;
+  --accent-ink: #ffffff;
+  --term-bg: #1d2530;
+  --term-ink: #dfe6ee;
+  --term-dim: #8b98a8;
+  --term-ok: #7bd88f;
+  --term-warn: #f0c060;
+  --font-display: "IBM Plex Sans Condensed", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-body: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0f141a; --surface: #161d26; --stage: #131a22; --grid: #1e2732; --ink: #e5eaf1; --muted: #9aa5b4; --line: #2a3340;
+    --base: #9eb0c6; --rhcsa: #ff7a70; --rhce: #f2a640; --cka: #85a8ff; --go: #b49cff; --ok: #5fd08a; --bad: #ff7a70;
+    --accent: #3cc4b3; --accent-ink: #062521; --term-bg: #0b1016; --term-ink: #dfe6ee; --term-dim: #7f8c9c; --term-ok: #7bd88f; --term-warn: #f0c060;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0f141a; --surface: #161d26; --stage: #131a22; --grid: #1e2732; --ink: #e5eaf1; --muted: #9aa5b4; --line: #2a3340;
+  --base: #9eb0c6; --rhcsa: #ff7a70; --rhce: #f2a640; --cka: #85a8ff; --go: #b49cff; --ok: #5fd08a; --bad: #ff7a70;
+  --accent: #3cc4b3; --accent-ink: #062521; --term-bg: #0b1016; --term-ink: #dfe6ee; --term-dim: #7f8c9c; --term-ok: #7bd88f; --term-warn: #f0c060;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.75; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+a { color: inherit; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+h1, h2 { font-family: var(--font-display); line-height: 1.25; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+code { font-family: var(--font-mono); font-size: .88em; }
+
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.t-base { --t: var(--base); } .t-rhcsa { --t: var(--rhcsa); } .t-rhce { --t: var(--rhce); } .t-cka { --t: var(--cka); } .t-go { --t: var(--go); }
+.t-ok { --t: var(--ok); } .t-bad { --t: var(--bad); } .t-mute { --t: var(--muted); }
+
+header .wrap { padding-block: 22px 12px; display: flex; flex-wrap: wrap; gap: 6px 24px; align-items: end; justify-content: space-between; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+header h1 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; }
+header .hint { color: var(--muted); font-size: 13px; }
+
+/* 章节导轨 */
+.rail { display: flex; gap: 6px; padding-block: 8px 14px; overflow-x: auto; scrollbar-width: none; }
+.chap { display: grid; gap: 4px; min-width: 0; flex: var(--n) 1 0; }
+.chap-name { font-family: var(--font-display); font-size: 13px; font-weight: 600; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chap.on .chap-name { color: var(--t); }
+.ticks { display: flex; gap: 3px; }
+.tick { all: unset; box-sizing: border-box; cursor: pointer; flex: 1 1 0; height: 8px; min-width: 10px; border-radius: 2px; background: color-mix(in srgb, var(--t) 22%, var(--surface)); }
+.tick.seen { background: color-mix(in srgb, var(--t) 55%, var(--surface)); }
+.tick.cur { background: var(--t); box-shadow: 0 0 0 2px color-mix(in srgb, var(--t) 30%, transparent); }
+.tick:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* 主体 */
+.deck { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 22px; align-items: start; padding-bottom: 24px; }
+.stage {
+  margin: 0; min-width: 0; border: 1px solid var(--line); border-radius: 8px; overflow: hidden;
+  background-color: var(--stage);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px; background-position: -1px -1px;
+}
+.stage-wrap { min-width: 0; display: grid; gap: 6px; }
+.zoom-bar { display: none; align-items: center; justify-content: flex-end; gap: 8px; font-size: 12px; color: var(--muted); }
+.stage.zoom { overflow-x: auto; }
+.stage.zoom .sv { width: 600px; max-width: none; }
+.talk { min-width: 0; display: grid; gap: 12px; align-content: start; }
+.talk-meta { display: flex; justify-content: space-between; gap: 12px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.talk-meta .chip-ch { color: var(--t); font-weight: 500; }
+.talk h2 { font-size: clamp(1.25rem, 2.4vw, 1.6rem); font-weight: 700; color: var(--ink); }
+.say { display: grid; gap: 10px; max-width: 62ch; }
+.say p.speaking { background: color-mix(in srgb, var(--accent) 10%, transparent); box-shadow: -8px 0 0 color-mix(in srgb, var(--accent) 10%, transparent), 8px 0 0 color-mix(in srgb, var(--accent) 10%, transparent); border-radius: 2px; }
+.refs { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px; }
+.refs span { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; }
+
+/* 控制栏 */
+.controls { position: sticky; bottom: 0; z-index: 4; background: color-mix(in srgb, var(--paper) 94%, transparent); backdrop-filter: blur(6px); border-top: 1px solid var(--line); }
+.controls .wrap { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; padding-block: 10px calc(10px + env(safe-area-inset-bottom, 0px)); }
+.btn { font: inherit; font-size: 14px; cursor: pointer; border-radius: 6px; padding: 7px 14px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+.btn:disabled { opacity: .4; cursor: default; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 500; }
+.btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
+.counter { font-family: var(--font-mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; margin-left: auto; }
+.tts-note { font-size: 12px; color: var(--muted); }
+
+/* SVG 场景 */
+.sv { display: block; width: 100%; height: auto; font-family: var(--font-body); }
+.bx { fill: var(--surface); stroke: var(--t); stroke-width: 2; }
+.bx.solid { fill: var(--t); }
+.bx.dash { stroke-dasharray: 7 5; }
+.frame { fill: color-mix(in srgb, var(--t) 5%, transparent); stroke: var(--t); stroke-width: 1.5; stroke-dasharray: 6 5; }
+.lb { fill: var(--ink); font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+.lb.mono { font-family: var(--font-mono); font-weight: 500; }
+.sb { fill: var(--muted); font-family: var(--font-mono); font-size: 15px; text-anchor: middle; dominant-baseline: central; }
+.bx.solid ~ .lb, .bx.solid ~ .sb { fill: var(--surface); }
+.ln { stroke: var(--t); stroke-width: 2.5; fill: none; }
+.ln.dash { stroke-dasharray: 7 6; }
+.ah { fill: var(--t); }
+.al { fill: var(--t); font-family: var(--font-mono); font-size: 15px; dominant-baseline: central; }
+.tx { fill: var(--ink); dominant-baseline: central; }
+.tx.mono { font-family: var(--font-mono); }
+.tx.muted { fill: var(--muted); }
+.tx.tcol { fill: var(--t); }
+.tx.bold { font-weight: 700; font-family: var(--font-display); }
+.nc { fill: var(--t); }
+.nt { fill: var(--surface); font-family: var(--font-mono); font-size: 15px; font-weight: 500; text-anchor: middle; dominant-baseline: central; }
+.panel { fill: var(--term-bg); }
+.ptx { fill: var(--term-ink); font-family: var(--font-mono); font-size: 16px; dominant-baseline: central; }
+.ptx.dim { fill: var(--term-dim); }
+.ptx.warn { fill: var(--term-warn); }
+.tok { fill: var(--t); stroke: var(--surface); stroke-width: 2; }
+.strike { stroke: var(--bad); stroke-width: 2.5; }
+
+/* HTML 场景 */
+.hs { padding: 18px; display: grid; gap: 14px; }
+.hs h3 { margin: 0; font-family: var(--font-display); font-size: 15px; color: var(--muted); font-weight: 600; }
+.cols2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; min-width: 0; }
+.card.tl { border-left: 4px solid var(--t); }
+.code, .term pre { margin: 0; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; overflow-x: auto; white-space: pre; }
+.code { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
+.code .k { color: var(--rhce); }
+.code .s { color: var(--cka); }
+.code .c { color: var(--muted); }
+.code .h { color: var(--rhcsa); font-weight: 500; }
+.code .ln, .term .tl { display: block; }
+.term { background: var(--term-bg); color: var(--term-ink); border-radius: 8px; overflow: hidden; min-width: 0; }
+.term-bar { display: flex; gap: 6px; align-items: center; padding: 7px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--term-dim); border-bottom: 1px solid color-mix(in srgb, var(--term-ink) 12%, transparent); }
+.term-bar i { width: 9px; height: 9px; border-radius: 50%; background: color-mix(in srgb, var(--term-ink) 25%, transparent); display: inline-block; }
+.term pre { padding: 12px 14px; }
+.term .pr { color: var(--term-ok); }
+.term .o { color: var(--term-ink); }
+.term .d { color: var(--term-dim); }
+.term .g { color: var(--term-ok); }
+.term .y { color: var(--term-warn); }
+.type { display: inline-block; vertical-align: bottom; }
+.grid10 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.dom { display: grid; gap: 2px; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--t); border-radius: 6px; padding: 8px 12px; min-width: 0; }
+.dom b { font-family: var(--font-display); font-size: 15px; }
+.dom span { font-size: 12.5px; color: var(--muted); }
+.dom.hot { border-color: var(--t); background: color-mix(in srgb, var(--t) 7%, var(--surface)); }
+.dom .flag { font-family: var(--font-mono); font-size: 11px; color: var(--t); }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.fact { background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--t); border-radius: 6px; padding: 8px 12px; font-size: 13px; min-width: 0; }
+.fact b { display: block; font-family: var(--font-display); color: var(--t); font-size: 15px; }
+.fact div { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.tasklist { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 13.5px; }
+.tasklist li { display: grid; grid-template-columns: 22px 1fr; gap: 6px; }
+.tasklist .box { width: 16px; height: 16px; border: 2px solid var(--rhcsa); border-radius: 3px; margin-top: 4px; display: grid; place-items: center; color: var(--surface); font-size: 11px; line-height: 1; }
+.tasklist .box.chk { background: var(--ok); border-color: var(--ok); }
+.map { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.map th { text-align: left; font-weight: 500; color: var(--muted); font-size: 12.5px; padding: 6px 10px; border-bottom: 2px solid var(--line); }
+.map td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.map td:first-child { color: var(--ink); }
+.map td.arrow { color: var(--muted); width: 1.5em; padding-inline: 0; text-align: center; }
+.map code { color: var(--t); }
+.map-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.runbook { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.runbook ol { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; font-size: 13px; }
+.runbook code { display: block; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--cka); font-size: 12px; }
+.tree { display: grid; gap: 10px; }
+.tree-root { justify-self: start; font-family: var(--font-mono); font-size: 13px; background: var(--cka); color: var(--surface); padding: 6px 12px; border-radius: 6px; }
+.branches { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.br { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--t); border-radius: 6px; padding: 8px 12px; display: grid; gap: 3px; min-width: 0; }
+.br b { font-family: var(--font-mono); font-size: 13.5px; color: var(--t); }
+.br span { font-size: 13px; }
+.br code { font-size: 12px; color: var(--muted); white-space: pre-wrap; overflow-wrap: anywhere; }
+.weight { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
+.weight .wb { flex: 1 1 auto; display: flex; height: 14px; border-radius: 3px; overflow: hidden; }
+.weight .wb i { display: block; height: 100%; }
+
+/* 动画 */
+.pop { animation: pop .5s cubic-bezier(.2, .7, .2, 1) both; animation-delay: var(--d, 0s); transform-box: fill-box; transform-origin: center; }
+.fade { animation: fade .5s ease both; animation-delay: var(--d, 0s); }
+.draw { animation: fade .15s both; animation-delay: var(--d, 0s); }
+.draw .ln { stroke-dasharray: 1 1; stroke-dashoffset: 1; animation: draw .7s ease-out both; animation-delay: var(--d, 0s); }
+.draw .al { animation: fade .4s both; animation-delay: calc(var(--d, 0s) + .35s); }
+.dim { animation: pop .5s cubic-bezier(.2, .7, .2, 1) both, dim .6s ease forwards; animation-delay: var(--d, 0s), var(--d2, 9s); }
+.type { animation: typing calc(var(--n) * 30ms) steps(var(--n)) both; animation-delay: var(--d, 0s); }
+.check { animation: checkin .3s ease both; animation-delay: var(--d, 0s); }
+@keyframes pop { from { opacity: 0; transform: translateY(10px) scale(.97); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes dim { to { opacity: .22; } }
+@keyframes typing { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes checkin { from { background: transparent; border-color: var(--rhcsa); color: transparent; } to { background: var(--ok); border-color: var(--ok); color: var(--surface); } }
+@media (prefers-reduced-motion: reduce) {
+  .pop, .fade, .draw, .draw .ln, .draw .al, .dim, .type, .check { animation: none !important; }
+  .draw .ln { stroke-dasharray: none; }
+  .ln.dash { stroke-dasharray: 7 6; }
+  .dim { opacity: .22; }
+  .check { background: var(--ok); border-color: var(--ok); }
+  .tok { display: none; }
+}
+
+@media (max-width: 900px) {
+  .deck { grid-template-columns: 1fr; gap: 14px; }
+}
+@media (max-width: 560px) {
+  .zoom-bar { display: flex; }
+  .btn { padding: 6px 10px; font-size: 13px; }
+  .btn.small { padding: 3px 10px; font-size: 12px; }
+  .counter { display: none; }
+  .cols2, .runbook, .branches, .facts { grid-template-columns: 1fr; }
+  .grid10 { grid-template-columns: 1fr; }
+  .hs { padding: 12px; }
+  .counter { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div style="display: grid; gap: 4px;">
+      <span class="eyebrow">考试导览 · 28 步 · 约 17 分钟</span>
+      <h1>RHCE 与 CKA 考试导览</h1>
+      <p class="hint">点「下一步」或按键盘 → 前进；打开「朗读」可以听讲解，打开「连播」会自动讲下去。</p>
+    </div>
+    <a data-path="index.html" style="font-size: 13px;">打开 24 周学习路线 →</a>
+  </div>
+  <div class="wrap"><nav class="rail" id="rail" aria-label="章节"></nav></div>
+</header>
+
+<main>
+  <div class="wrap deck">
+    <div class="stage-wrap">
+      <div class="zoom-bar"><span>图解字太小？</span><button type="button" class="btn small" id="zoom" aria-pressed="false">放大图解</button></div>
+      <figure class="stage" id="stage"></figure>
+    </div>
+    <article class="talk" id="talk">
+      <div class="talk-meta"><span class="chip-ch" id="chap"></span><span id="pos"></span></div>
+      <h2 id="title"></h2>
+      <div class="say" id="say"></div>
+      <div class="refs" id="refs"></div>
+    </article>
+  </div>
+</main>
+
+<div class="controls">
+  <div class="wrap">
+    <button type="button" class="btn" id="prev">← 上一步</button>
+    <button type="button" class="btn primary" id="next">下一步 →</button>
+    <button type="button" class="btn" id="tts" aria-pressed="false">朗读</button>
+    <button type="button" class="btn" id="auto" aria-pressed="false">连播</button>
+    <button type="button" class="btn" id="replay">重播</button>
+    <span class="tts-note" id="tts-note" hidden>这个浏览器不支持语音朗读，可以只看文字</span>
+    <span class="counter" id="counter"></span>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var GH = "https://github.com/guiguisocute/RHCE-CKA/blob/main/";
+  var LOCAL = location.protocol === "file:";
+  function href(p) { return LOCAL ? p : GH + p; }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+
+  /* ---------- SVG 绘图小工具 ---------- */
+  var TRACK_IDS = ["base", "rhcsa", "rhce", "cka", "go", "ok", "bad", "mute"];
+  var DEFS = "<defs>" + TRACK_IDS.map(function (t) {
+    return '<marker id="ah-' + t + '" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="ah t-' + t + '" d="M0,0 L10,5 L0,10 z"/></marker>';
+  }).join("") + "</defs>";
+  function svg(h, inner, label, w) {
+    return '<svg class="sv" viewBox="0 0 ' + (w || 720) + " " + h + '" role="img" aria-label="' + esc(label) + '">' + DEFS + inner + "</svg>";
+  }
+  function box(x, y, w, h, label, o) {
+    o = o || {};
+    var fs = o.fs || 22, cx = x + w / 2, cy = y + h / 2;
+    var ly = o.sub ? cy - fs * 0.45 : cy;
+    var st = "--d:" + (o.d || 0) + "s" + (o.d2 != null ? ";--d2:" + o.d2 + "s" : "");
+    return '<g class="' + (o.d2 != null ? "dim" : "pop") + " t-" + (o.t || "base") + '" style="' + st + '">' +
+      '<rect class="bx' + (o.solid ? " solid" : "") + (o.dash ? " dash" : "") + '" x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="8"/>' +
+      '<text class="lb' + (o.mono ? " mono" : "") + '" x="' + cx + '" y="' + ly + '" style="font-size:' + fs + 'px">' + esc(label) + "</text>" +
+      (o.sub ? '<text class="sb" x="' + cx + '" y="' + (cy + fs * 0.62) + '"' + (o.sfs ? ' style="font-size:' + o.sfs + 'px"' : "") + ">" + esc(o.sub) + "</text>" : "") +
+      "</g>";
+  }
+  function frame(x, y, w, h, o) {
+    o = o || {};
+    return '<g class="fade t-' + (o.t || "base") + '" style="--d:' + (o.d || 0) + 's"><rect class="frame" x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="10"/>' +
+      (o.label ? '<text class="tx tcol bold" x="' + (o.right ? x + w - 14 : x + 14) + '" y="' + (y + 22) + '" text-anchor="' + (o.right ? "end" : "start") + '" style="font-size:16px">' + esc(o.label) + "</text>" : "") + "</g>";
+  }
+  function arrow(x1, y1, x2, y2, o) {
+    o = o || {};
+    var t = o.t || "mute", lab = "";
+    if (o.label) {
+      var lx = o.lx != null ? o.lx : (x1 + x2) / 2, ly = o.ly != null ? o.ly : (y1 + y2) / 2 - 12;
+      lab = '<text class="al" x="' + lx + '" y="' + ly + '" text-anchor="' + (o.anchor || "middle") + '">' + esc(o.label) + "</text>";
+    }
+    return '<g class="' + (o.dash ? "fade" : "draw") + " t-" + t + '" style="--d:' + (o.d || 0) + 's">' +
+      '<line class="ln' + (o.dash ? " dash" : "") + '" x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '"' + (o.dash ? "" : ' pathLength="1"') +
+      (o.noHead ? "" : ' marker-end="url(#ah-' + t + ')"') + "/>" + lab + "</g>";
+  }
+  function txt(x, y, s, o) {
+    o = o || {};
+    return '<text class="tx fade ' + (o.cls || "") + (o.t ? " t-" + o.t : "") + '" x="' + x + '" y="' + y + '" text-anchor="' + (o.anchor || "middle") + '" style="--d:' + (o.d || 0) + "s;font-size:" + (o.fs || 18) + 'px">' + esc(s) + "</text>";
+  }
+  function num(x, y, n, o) {
+    o = o || {};
+    return '<g class="pop t-' + (o.t || "cka") + '" style="--d:' + (o.d || 0) + 's"><circle class="nc" cx="' + x + '" cy="' + y + '" r="14"/><text class="nt" x="' + x + '" y="' + y + '">' + n + "</text></g>";
+  }
+  function token(path, o) {
+    o = o || {};
+    return '<circle class="tok t-' + (o.t || "cka") + '" r="7" opacity="0"><set attributeName="opacity" to="1" begin="' + (o.begin || 0) + 's" fill="freeze"/>' +
+      '<animateMotion path="' + path + '" dur="' + (o.dur || 2) + 's" begin="' + (o.begin || 0) + 's" repeatCount="indefinite"/></circle>';
+  }
+  function panel(x, y, w, h, lines, o) {
+    o = o || {};
+    var out = '<g class="pop" style="--d:' + (o.d || 0) + 's"><rect class="panel" x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="8"/></g>';
+    lines.forEach(function (l, i) {
+      out += '<text class="ptx fade' + (l[1] === 1 ? " dim" : l[1] === 2 ? " warn" : "") + '" x="' + (x + 16) + '" y="' + (y + 24 + i * (o.lh || 26)) + '" style="--d:' + ((o.d || 0) + 0.3 + i * (o.step || 0.4)) + 's">' + esc(l[0]) + "</text>";
+    });
+    return out;
+  }
+
+  /* ---------- HTML 场景小工具 ---------- */
+  function term(title, lines) {
+    var body = lines.map(function (l) {
+      var kind = l[0], s = l[1], d = l[2] || 0;
+      if (kind === "c") return '<span class="tl fade" style="--d:' + d + 's"><span class="pr">$ </span><span class="type" style="--d:' + (d + 0.1) + "s;--n:" + Math.max(s.length, 1) + '">' + esc(s) + "</span></span>";
+      var cls = { o: "o", d: "d", g: "g", y: "y" }[kind] || "o";
+      return '<span class="tl fade ' + cls + '" style="--d:' + d + 's">' + (esc(s) || " ") + "</span>";
+    }).join("");
+    return '<div class="term"><div class="term-bar"><i></i><i></i><i></i><span>' + esc(title) + "</span></div><pre>" + body + "</pre></div>";
+  }
+  function hl(line) {
+    var e = esc(line);
+    if (/^\s*#/.test(line)) return '<span class="c">' + e + "</span>";
+    if (/^\s*\[.*\]\s*$/.test(line)) return '<span class="h">' + e + "</span>";
+    e = e.replace(/^(\s*-?\s*)([\w.\-]+)(\s*[:=])/, '$1<span class="k">$2</span>$3');
+    e = e.replace(/(\{\{[^}]*\}\})/g, '<span class="s">$1</span>');
+    return e;
+  }
+  function code(text, d0, step) {
+    return '<pre class="code">' + text.split("\n").map(function (l, i) {
+      return '<span class="ln fade" style="--d:' + (d0 + i * (step || 0.12)).toFixed(2) + 's">' + (hl(l) || " ") + "</span>";
+    }).join("") + "</pre>";
+  }
+  function stg(d) { return 'style="--d:' + d + 's"'; }
+
+  /* ---------- 25 步讲解 ---------- */
+  var CHAPTERS = [
+    { id: "open", name: "开场", t: "base" },
+    { id: "rhcsa", name: "RHCSA · EX200", t: "rhcsa" },
+    { id: "rhce", name: "RHCE · EX294", t: "rhce" },
+    { id: "cka", name: "CKA", t: "cka" },
+    { id: "go", name: "Go 运维开发", t: "go" },
+    { id: "wrap", name: "串起来", t: "base" }
+  ];
+
+  var STEPS = [
+    /* ===== 开场 ===== */
+    { ch: "open", title: "两张证书，三场考试",
+      say: [
+        "先把全局讲清楚。你要拿两张证书：红帽的 RHCE 和 CNCF 的 CKA，但一共要考三场。",
+        "RHCE 有前置条件：先考过 RHCSA，也就是 EX200，手里有有效的 RHCSA，再考过 EX294，才能拿到 RHCE。CKA 由 Linux 基金会组织，和红帽没有依赖关系。",
+        "我给你排的顺序是 RHCSA、RHCE、CKA。接下来按这个顺序，一门一门讲它们考什么。"
+      ],
+      refs: [["知识地图", "notes/README.md"], ["24 周学习路线", "index.html"]],
+      scene: function () {
+        return svg(540,
+          txt(190, 70, "红帽 Red Hat", { cls: "bold tcol", t: "rhcsa", fs: 20, d: 0.1 }) +
+          box(60, 330, 260, 110, "RHCSA", { t: "rhcsa", sub: "EX200 · 系统管理员", fs: 30, d: 0.2 }) +
+          arrow(190, 330, 190, 236, { t: "rhcsa", d: 0.8, label: "必须先持有", lx: 205, ly: 283, anchor: "start" }) +
+          box(60, 120, 260, 110, "RHCE", { t: "rhce", sub: "EX294 · Ansible 自动化", fs: 30, d: 1.0 }) +
+          arrow(360, 80, 360, 480, { t: "mute", dash: true, noHead: true, d: 1.4 }) +
+          txt(540, 175, "Linux Foundation · CNCF", { cls: "bold tcol", t: "cka", fs: 18, d: 1.6 }) +
+          box(410, 225, 260, 110, "CKA", { t: "cka", sub: "Kubernetes 管理员", fs: 30, d: 1.7 }) +
+          num(60, 330, "1", { t: "rhcsa", d: 2.3 }) + num(60, 120, "2", { t: "rhce", d: 2.5 }) + num(410, 225, "3", { t: "cka", d: 2.7 }) +
+          txt(360, 515, "2 张证书 · 3 场考试 · 顺序 ①→②→③", { fs: 20, cls: "bold", d: 3.0 }),
+          "RHCSA 是 RHCE 的前置；CKA 独立；建议顺序 RHCSA、RHCE、CKA");
+      } },
+    { ch: "open", title: "三场考试都是上机实操",
+      say: [
+        "三场考试都没有选择题。你会拿到几台虚拟机或几个集群，加上一张任务清单，比如「建一个逻辑卷并开机自动挂载」。考完后，评分程序直接检查机器的最终状态。",
+        "所以考的是手上功夫：会不会做、做得对不对、配置能不能在重启后留下来。只背概念帮不了你。",
+        "时长和文档规则各不相同。RHCSA 约 3 小时，RHCE 约 4 小时，及格线一般是 300 分里拿 210，只能查机器上自带的 man 和 ansible-doc。CKA 2 小时，66 分及格，可以开 kubernetes.io 的官方文档。这些数字报名前请再核对官网。"
+      ],
+      refs: [["RHCSA 轨道说明", "notes/rhcsa/README.md"], ["CKA 轨道说明", "notes/cka/README.md"]],
+      scene: function () {
+        return '<div class="hs">' +
+          '<div class="cols2">' +
+            '<div class="card fade" ' + stg(0.1) + '><h3>任务清单（示例，原创）</h3><ul class="tasklist" style="margin-top:8px">' +
+              '<li><span class="box check" ' + stg(2.6) + '>✓</span><span>在 serverb 上建卷组 vgweb，切出 500 MiB 的逻辑卷 lvweb，格式化为 XFS，开机自动挂载到 /srv/web</span></li>' +
+              '<li><span class="box check" ' + stg(3.4) + '>✓</span><span>让 httpd 从 /srv/web 提供网页，SELinux 保持 enforcing</span></li>' +
+              '<li><span class="box check" ' + stg(4.2) + '>✓</span><span>重启后以上配置仍然有效</span></li>' +
+            "</ul></div>" +
+            term("root@serverb", [
+              ["c", "lvcreate -n lvweb -L 500M vgweb", 0.4],
+              ["g", '  Logical volume "lvweb" created.', 1.4],
+              ["c", "mkfs.xfs -q /dev/vgweb/lvweb", 1.6],
+              ["c", "vim /etc/fstab", 2.3],
+              ["c", "mount -a && findmnt /srv/web", 2.9],
+              ["o", "TARGET   SOURCE                    FSTYPE", 3.8],
+              ["o", "/srv/web /dev/mapper/vgweb-lvweb  xfs", 3.9]
+            ]) +
+          "</div>" +
+          '<div class="facts">' +
+            '<div class="fact t-rhcsa fade" ' + stg(4.6) + '><b>RHCSA · EX200</b>约 3 小时 · 210/300<div>man · /usr/share/doc</div></div>' +
+            '<div class="fact t-rhce fade" ' + stg(4.8) + '><b>RHCE · EX294</b>约 4 小时 · 210/300<div>ansible-doc</div></div>' +
+            '<div class="fact t-cka fade" ' + stg(5.0) + '><b>CKA</b>2 小时 · 66%<div>kubernetes.io/docs</div></div>' +
+          "</div></div>";
+      } },
+
+    /* ===== RHCSA ===== */
+    { ch: "rhcsa", title: "RHCSA 考什么",
+      say: [
+        "RHCSA 考的是一个 RHEL 系统管理员的日常工作，考纲分成十来块：命令行工具、脚本、启动与进程、存储、文件系统、软件与计划任务、网络、用户、安全。",
+        "你在 Ubuntu 上练出来的命令行基本功大部分能直接用。最容易丢分的是两块：存储，也就是分区、LVM 和挂载；还有安全，也就是 firewalld 和 SELinux。我在计划里给它们各留了一整周。",
+        "RHEL 10 版考纲加入了 Flatpak；容器 Podman 这块据第三方资料可能已经删掉。这两点以官方考纲为准。"
+      ],
+      refs: [["RHCSA 考纲 → 笔记对照", "notes/rhcsa/README.md"]],
+      scene: function () {
+        var D = [
+          ["基础工具", "重定向 · grep · tar · ssh · 权限"], ["Shell 脚本", "if · for · 位置参数 · 退出码"],
+          ["运行中的系统", "启动 · target · root 重置 · 日志 · tuned"], ["本地存储", "分区 · LVM · swap", 1],
+          ["文件系统", "XFS · ext4 · NFS · autofs"], ["部署与维护", "dnf 仓库 · Flatpak · cron/timer · chrony"],
+          ["网络", "nmcli · 主机名 · DNS"], ["用户和组", "useradd · 密码策略 · sudo"],
+          ["安全", "firewalld · SELinux · SSH 密钥", 1], ["容器", "Podman", 2]
+        ];
+        return '<div class="hs"><h3>EX200 考纲领域</h3><div class="grid10">' + D.map(function (x, i) {
+          var flag = x[2] === 1 ? '<span class="flag">失分大户</span>' : x[2] === 2 ? '<span class="flag">RHEL 10 版可能已移除</span>' : "";
+          return '<div class="dom t-rhcsa pop' + (x[2] === 1 ? " hot" : "") + '" ' + stg(0.1 + i * 0.22) + "><b>" + x[0] + "</b><span>" + x[1] + "</span>" + flag + "</div>";
+        }).join("") + "</div></div>";
+      } },
+    { ch: "rhcsa", title: "从 Ubuntu 换到 RHEL",
+      say: [
+        "你缺的不是 Linux，而是红帽这一套工具。左边是你熟悉的，右边是考场上要用的。",
+        "装软件用 dnf，软件源写在 /etc/yum.repos.d 下的 .repo 文件里。防火墙是 firewalld，用 firewall-cmd 操作。网络由 NetworkManager 管，命令行工具是 nmcli。强制访问控制是 SELinux，它比 AppArmor 管得更细，也更容易让服务起不来。管理员组从 sudo 换成了 wheel。",
+        "第一周装好 RHEL 10 虚拟机后，先把这几样各用一遍，建立手感。"
+      ],
+      refs: [["Ubuntu → RHEL 对照", "notes/00-foundations/01-ubuntu-to-rhel.md"], ["实验环境搭建", "labs/rhcsa/00-lab-setup.md"]],
+      scene: function () {
+        var rows = [["apt", "/etc/apt/sources.list", "dnf", "/etc/yum.repos.d/*.repo"], ["ufw", "ufw allow 80", "firewalld", "firewall-cmd"],
+          ["AppArmor", "aa-status", "SELinux", "semanage · restorecon"], ["netplan", "/etc/netplan/*.yaml", "NetworkManager", "nmcli"], ["sudo 组", "usermod -aG sudo", "wheel 组", "usermod -aG wheel"]];
+        var s = txt(165, 62, "你熟悉的 Ubuntu", { cls: "bold muted", fs: 20, d: 0.1 }) + txt(555, 62, "考场上的 RHEL 10", { cls: "bold tcol", t: "rhcsa", fs: 20, d: 0.1 });
+        rows.forEach(function (r, i) {
+          var y = 92 + i * 86, d = 0.3 + i * 0.5;
+          s += box(40, y, 250, 66, r[0], { t: "base", sub: r[1], fs: 21, d: d });
+          s += arrow(292, y + 33, 428, y + 33, { t: "rhcsa", d: d + 0.25 });
+          s += box(430, y, 250, 66, r[2], { t: "rhcsa", sub: r[3], fs: 21, d: d + 0.35 });
+        });
+        return svg(540, s, "Ubuntu 工具与 RHEL 工具的对应关系");
+      } },
+    { ch: "rhcsa", title: "开机流程与重置 root 密码",
+      say: [
+        "RHEL 开机依次经过：固件、GRUB2 引导菜单、内核加上 initramfs，最后交给 systemd，进入默认的 target，比如 multi-user 或 graphical。",
+        "这张图要记住，因为考试可能不给你 root 密码。做法是在 GRUB 菜单按 e，在内核参数末尾加 rd.break，让系统停在 initramfs 阶段。然后把 /sysroot 重新挂成可写，chroot 进去，用 passwd 改密码。",
+        "最后一步很关键：touch /.autorelabel。漏了它，SELinux 标签会出错，重启后谁都登不进去。这套操作要练到不用想也能做对。RHEL 10 的细节以官方文档为准。"
+      ],
+      refs: [["RHCSA-03 运行中的系统", "notes/rhcsa/03-operate-running-systems.md"], ["systemd 与 journald", "notes/00-foundations/02-systemd-journald.md"]],
+      scene: function () {
+        return svg(540,
+          box(30, 100, 200, 80, "固件", { t: "base", sub: "UEFI / BIOS", d: 0.1 }) +
+          arrow(232, 140, 258, 140, { t: "mute", d: 0.4 }) +
+          box(260, 100, 200, 80, "GRUB2", { t: "rhcsa", sub: "按 e 改内核参数", d: 0.5 }) +
+          arrow(462, 140, 488, 140, { t: "mute", d: 0.8 }) +
+          box(490, 100, 200, 80, "内核", { t: "base", sub: "vmlinuz", d: 0.9 }) +
+          arrow(590, 182, 590, 288, { t: "mute", d: 1.2 }) +
+          box(490, 290, 200, 80, "initramfs", { t: "rhcsa", solid: true, sub: "rd.break 停在这里", mono: true, d: 1.3 }) +
+          arrow(488, 330, 462, 330, { t: "mute", d: 1.6 }) +
+          box(260, 290, 200, 80, "systemd", { t: "base", sub: "PID 1", mono: true, d: 1.7 }) +
+          arrow(258, 330, 232, 330, { t: "mute", d: 2.0 }) +
+          box(30, 290, 200, 80, "target", { t: "base", sub: "multi-user.target", mono: true, d: 2.1 }) +
+          txt(30, 60, "开机顺序", { cls: "bold muted", anchor: "start", fs: 18, d: 0.1 }) +
+          arrow(590, 372, 590, 408, { t: "rhcsa", d: 2.6 }) +
+          panel(30, 410, 660, 120, [
+            ["switch_root:/# mount -o remount,rw /sysroot"],
+            ["switch_root:/# chroot /sysroot"],
+            ["sh-5.2# passwd root"],
+            ["sh-5.2# touch /.autorelabel   # 别漏了这一步", 2]
+          ], { d: 2.7, step: 0.45, lh: 25 }),
+          "RHEL 开机流程：固件、GRUB2、内核、initramfs、systemd、target；在 initramfs 用 rd.break 重置 root 密码");
+      } },
+    { ch: "rhcsa", title: "存储：从一块磁盘到一个挂载点",
+      say: [
+        "LVM 是 RHCSA 的重头戏。从下往上看：一块磁盘，分出一个分区，做成物理卷 PV，若干个 PV 组成卷组 VG，再从卷组里切出逻辑卷 LV，格式化成 XFS，最后挂到目录上。",
+        "挂载要写进 /etc/fstab，并且用 UUID，否则重启就没了。改完先执行 mount -a 检查，fstab 写错可能让系统开不了机。",
+        "LVM 的好处是能在线扩容：加一块盘，vgextend 扩卷组，lvextend 加 -r 参数同时扩逻辑卷和文件系统。XFS 只能扩不能缩，这一点也常考。"
+      ],
+      refs: [["RHCSA-04 本地存储与 LVM", "notes/rhcsa/04-local-storage-lvm.md"], ["RHCSA-05 文件系统 / NFS / autofs", "notes/rhcsa/05-file-systems-nfs-autofs.md"]],
+      scene: function () {
+        var L = [
+          ["/dev/vdb", "一块新磁盘 · lsblk", "base"], ["/dev/vdb1", "parted / fdisk · 类型 lvm", "base"],
+          ["PV 物理卷", "pvcreate /dev/vdb1", "rhcsa"], ["VG vgdata", "vgcreate vgdata /dev/vdb1", "rhcsa"],
+          ["LV lvdata", "lvcreate -n lvdata -L 1G vgdata", "rhcsa"], ["XFS 文件系统", "mkfs.xfs /dev/vgdata/lvdata", "rhcsa"],
+          ["/data", "/etc/fstab 写 UUID · mount -a", "rhcsa"]
+        ];
+        var s = "";
+        L.forEach(function (l, i) {
+          s += box(30, 466 - i * 64, 420, 54, l[0], { t: l[2], sub: l[1], fs: 19, solid: i === 6, mono: i < 2 || i === 6, d: 0.2 + i * 0.4 });
+        });
+        s += txt(240, 52, "从下往上搭", { cls: "bold muted", fs: 17, d: 0.1 });
+        s += box(480, 466, 220, 54, "/dev/vdc", { t: "rhcsa", dash: true, sub: "第二块盘", mono: true, fs: 19, d: 3.2 });
+        s += arrow(560, 464, 452, 312, { t: "rhcsa", d: 3.6, label: "vgextend", lx: 515, ly: 372, anchor: "start" });
+        s += txt(480, 112, "在线扩容", { cls: "bold tcol", t: "rhcsa", anchor: "start", fs: 20, d: 4.0 });
+        s += txt(480, 145, "vgextend vgdata /dev/vdc1", { cls: "mono", anchor: "start", fs: 14, d: 4.2 });
+        s += txt(480, 170, "lvextend -r -L +500M", { cls: "mono", anchor: "start", fs: 14, d: 4.5 });
+        s += txt(480, 192, "  /dev/vgdata/lvdata", { cls: "mono", anchor: "start", fs: 14, d: 4.5 });
+        s += txt(480, 217, "df -h /data", { cls: "mono", anchor: "start", fs: 14, d: 4.8 });
+        s += txt(480, 250, "XFS 只能扩，不能缩", { cls: "muted", anchor: "start", fs: 15, d: 5.1 });
+        return svg(540, s, "LVM 存储栈：磁盘、分区、PV、VG、LV、XFS、挂载点，以及在线扩容");
+      } },
+    { ch: "rhcsa", title: "SELinux：进程和文件都有标签",
+      say: [
+        "SELinux 给每个进程和每个文件都贴了标签。httpd 进程的标签是 httpd_t，它只能读带有 httpd_sys_content_t 这类标签的文件。",
+        "如果你把网页放到新目录 /srv/web，文件的标签是 default_t，httpd 就读不了。这时文件权限明明是对的，浏览器还是报 403。",
+        "正确做法是用 semanage fcontext 登记规则，再用 restorecon 把标签刷上去。端口也一样，换端口要用 semanage port 加标签。别用 setenforce 0 关掉 SELinux，考题通常要求它保持 enforcing。"
+      ],
+      refs: [["RHCSA-09 防火墙与 SELinux", "notes/rhcsa/09-security-firewalld-selinux.md"]],
+      scene: function () {
+        return svg(540,
+          box(30, 200, 210, 100, "httpd 进程", { t: "rhcsa", solid: true, sub: "httpd_t", d: 0.1 }) +
+          box(450, 60, 250, 90, "/srv/web/index.html", { t: "bad", sub: "default_t", mono: true, fs: 17, d: 0.5 }) +
+          arrow(242, 228, 448, 112, { t: "bad", d: 1.0, label: "✕ 拒绝 · AVC denied", lx: 300, ly: 128 }) +
+          txt(460, 192, "semanage fcontext -a \\", { cls: "mono", anchor: "start", fs: 14, d: 1.8 }) +
+          txt(460, 214, "  -t httpd_sys_content_t \\", { cls: "mono", anchor: "start", fs: 14, d: 1.9 }) +
+          txt(460, 236, "  '/srv/web(/.*)?'", { cls: "mono", anchor: "start", fs: 14, d: 2.0 }) +
+          txt(460, 266, "restorecon -Rv /srv/web", { cls: "mono", anchor: "start", fs: 14, d: 2.4 }) +
+          arrow(575, 152, 575, 172, { t: "rhcsa", d: 1.6 }) + arrow(575, 282, 575, 318, { t: "rhcsa", d: 2.7 }) +
+          box(450, 320, 250, 90, "/srv/web/index.html", { t: "ok", sub: "httpd_sys_content_t", mono: true, fs: 17, d: 2.9 }) +
+          arrow(242, 272, 448, 360, { t: "ok", d: 3.3, label: "✓ 允许", lx: 330, ly: 336 }) +
+          txt(360, 470, "能不能访问 = 进程标签 × 文件标签 × 策略", { cls: "bold", fs: 20, d: 3.9 }) +
+          txt(360, 505, "端口同理：semanage port -a -t http_port_t -p tcp 82", { cls: "mono muted", fs: 14, d: 4.3 }),
+          "SELinux：httpd_t 进程读不了 default_t 文件，改成 httpd_sys_content_t 后允许");
+      } },
+    { ch: "rhcsa", title: "一个请求要过三道关",
+      say: [
+        "排查服务不通时，按这个顺序想：请求先到防火墙，再经过 SELinux，最后才到服务本身。三处任何一处没放行，结果都是访问不了。",
+        "防火墙用 firewall-cmd 加 --permanent 放行，再 --reload。SELinux 去审计日志里找 AVC denied。服务本身用 systemctl status 和 ss -tlnp 看有没有在监听。",
+        "这个思路到 CKA 还会再用一次，只是关卡换成了 NetworkPolicy、Service 和 Pod。"
+      ],
+      refs: [["RHCSA-09 防火墙与 SELinux", "notes/rhcsa/09-security-firewalld-selinux.md"], ["RHCSA-07 网络 nmcli", "notes/rhcsa/07-networking-nmcli.md"]],
+      scene: function () {
+        var g = [[185, "firewalld", "防火墙", "症状：超时 / 拒绝", ["firewall-cmd", "--add-service=http", "--permanent", "--reload"]],
+                 [375, "SELinux", "标签", "症状：AVC denied", ["ausearch -m avc", "semanage port -l", "restorecon -Rv"]],
+                 [565, "httpd", "服务本身", "症状：端口没监听", ["systemctl", "enable --now", "ss -tlnp"]]];
+        var s = box(20, 160, 120, 80, "请求", { t: "base", sub: "tcp/80", d: 0.1 });
+        g.forEach(function (x, i) {
+          var w = i === 2 ? 135 : 150, cx = x[0] + w / 2, d = 0.5 + i * 0.6;
+          s += arrow(i === 0 ? 142 : g[i - 1][0] + 152, 200, x[0] - 2, 200, { t: "rhcsa", d: d - 0.2 });
+          s += box(x[0], 150, w, 100, x[1], { t: "rhcsa", solid: i === 2, sub: x[2], mono: i !== 2, fs: 21, d: d });
+          s += txt(cx, 290, x[3], { fs: 15, cls: "tcol", t: "rhcsa", d: 2.6 + i * 0.3 });
+          x[4].forEach(function (c, j) { s += txt(cx, 328 + j * 24, c, { cls: "mono muted", fs: 14, d: 2.8 + i * 0.3 + j * 0.1 }); });
+        });
+        s += token("M140,200 L565,200", { t: "rhcsa", begin: 2.2, dur: 3 });
+        s += txt(360, 495, "三处都放行，请求才能到达服务", { cls: "bold", fs: 20, d: 4.0 });
+        return svg(540, s, "请求依次经过 firewalld、SELinux、服务本身");
+      } },
+    { ch: "rhcsa", title: "红帽考试第一原则：重启后仍然有效",
+      say: [
+        "考纲明确要求：配置在重启后必须仍然生效，评分前机器可能会被重启。左边这些命令只改了当前运行状态，重启就丢了；右边的做法会写进配置文件。",
+        "例如 mount 要配 /etc/fstab，firewall-cmd 要加 --permanent，服务要 enable，内核参数写进 /etc/sysctl.d。",
+        "考试时养成习惯：全部做完后自己重启一遍，再逐题验证。这一步能救回很多分。"
+      ],
+      refs: [["RHCSA 模拟考", "labs/rhcsa/mock-exam.md"], ["RHCSA 练习题", "labs/rhcsa/practice-set-1.md"]],
+      scene: function () {
+        var R = [["mount /dev/vg/lv /data", "/etc/fstab + mount -a"], ["firewall-cmd --add-port=82/tcp", "加 --permanent 再 --reload"],
+                 ["systemctl start httpd", "systemctl enable --now httpd"], ["setenforce 1", "/etc/selinux/config"],
+                 ["sysctl -w net.ipv4.ip_forward=1", "/etc/sysctl.d/90-lab.conf"], ["hostname srv1", "hostnamectl set-hostname srv1"]];
+        var s = txt(180, 60, "只在当前生效", { cls: "bold tcol", t: "bad", fs: 20, d: 0.1 }) + txt(540, 60, "重启后仍生效", { cls: "bold tcol", t: "ok", fs: 20, d: 0.1 });
+        R.forEach(function (r, i) {
+          var y = 88 + i * 62;
+          s += box(20, y, 320, 48, r[0], { t: "bad", mono: true, fs: 15, d: 0.3 + i * 0.25, d2: 3.4 + i * 0.12 });
+          s += '<line class="strike fade" x1="30" y1="' + (y + 24) + '" x2="330" y2="' + (y + 24) + '" style="--d:' + (3.4 + i * 0.12) + 's"/>';
+          s += box(380, y, 320, 48, r[1], { t: "ok", mono: true, fs: 15, d: 0.45 + i * 0.25 });
+          s += txt(686, y + 24, "✓", { cls: "tcol bold", t: "ok", fs: 22, d: 3.6 + i * 0.12 });
+        });
+        s += '<g class="pop" style="--d:2.8s">' + '<rect class="bx t-rhcsa" x="280" y="468" width="160" height="50" rx="25" style="stroke:var(--rhcsa)"/></g>';
+        s += txt(360, 493, "⟳ 重启", { cls: "bold tcol", t: "rhcsa", fs: 22, d: 2.8 });
+        return svg(540, s, "只改运行时的命令重启后失效，写入配置文件的做法重启后仍然生效");
+      } },
+
+    /* ===== RHCE ===== */
+    { ch: "rhce", title: "RHCE：用 Ansible 管一群机器",
+      say: [
+        "RHCE 的 EX294 考 Ansible。你可以把它当成用 YAML 写的脚本：在一台控制节点上编写，通过 SSH 同时推送到很多台受管节点执行。",
+        "受管节点不需要装 agent，有 SSH 和 Python 就行。",
+        "考试环境一般是一台控制节点加几台受管节点，你的任务是写 playbook，把这些机器配置成题目要求的状态。"
+      ],
+      refs: [["RHCE-01 Ansible 架构", "notes/rhce/01-ansible-architecture.md"], ["RHCE 轨道说明", "notes/rhce/README.md"]],
+      scene: function () {
+        var s = box(60, 100, 150, 50, "site.yml", { t: "rhce", mono: true, fs: 18, d: 0.1 }) +
+          arrow(135, 152, 135, 198, { t: "rhce", d: 0.3 }) +
+          box(30, 200, 210, 130, "控制节点", { t: "rhce", solid: true, sub: "ansible-core", fs: 26, d: 0.4 });
+        for (var i = 0; i < 4; i++) {
+          var y = 50 + i * 115;
+          s += box(470, y, 230, 72, "node" + (i + 1), { t: "rhce", sub: "sshd + python3", mono: true, fs: 20, d: 0.8 + i * 0.2 });
+          s += arrow(242, 265, 468, y + 36, { t: "rhce", d: 1.2 + i * 0.2, label: i === 0 ? "SSH" : "", lx: 296, ly: 168 });
+          s += token("M242,265 L468," + (y + 36), { t: "rhce", begin: 2.2 + i * 0.35, dur: 1.6 });
+        }
+        s += txt(360, 512, "受管节点不用装 agent：有 SSH 和 Python 就够了", { cls: "bold", fs: 19, d: 2.6 });
+        return svg(540, s, "控制节点通过 SSH 把任务推送到 4 台受管节点");
+      } },
+    { ch: "rhce", title: "先搭好 inventory 和 ansible.cfg",
+      say: [
+        "inventory 告诉 Ansible 有哪些机器、怎么分组。这里 web 组有两台，db 组有一台，prod 组用 :children 把两个组合在一起。",
+        "ansible.cfg 定义默认行为：用哪个 inventory、以哪个用户 SSH 登录、要不要用 sudo 提权。考试的第一题往往就是搭好这两个文件。",
+        "搭好后用 ansible all -m ping 验证，全部返回 pong，才说明控制节点和受管节点之间是通的。"
+      ],
+      refs: [["RHCE-02 Inventory 与 ansible.cfg", "notes/rhce/02-inventory-and-config.md"], ["RHCE 实验环境", "labs/rhce/00-lab-setup.md"]],
+      scene: function () {
+        return '<div class="hs"><div class="cols2">' +
+          '<div style="display:grid;gap:6px;min-width:0"><h3 class="fade" ' + stg(0.1) + ">inventory</h3>" +
+            code("[web]\nnode1\nnode2\n\n[db]\nnode3\n\n[prod:children]\nweb\ndb", 0.2, 0.1) + "</div>" +
+          '<div style="display:grid;gap:6px;min-width:0"><h3 class="fade" ' + stg(1.2) + ">ansible.cfg</h3>" +
+            code("[defaults]\ninventory = ./inventory\nremote_user = automation\nroles_path = ./roles\n\n[privilege_escalation]\nbecome = true\nbecome_method = sudo", 1.3, 0.12) + "</div>" +
+          "</div>" +
+          term("automation@control ~/ansible", [
+            ["c", "ansible all -m ping", 2.6],
+            ["g", 'node1 | SUCCESS => {"changed": false, "ping": "pong"}', 3.4],
+            ["g", 'node2 | SUCCESS => {"changed": false, "ping": "pong"}', 3.6],
+            ["g", 'node3 | SUCCESS => {"changed": false, "ping": "pong"}', 3.8]
+          ]) + "</div>";
+      } },
+    { ch: "rhce", title: "playbook 的结构",
+      say: [
+        "一个 playbook 由一个或多个 play 组成。每个 play 指定在哪些主机上执行，再列出一串 task。",
+        "每个 task 调用一个模块，比如 ansible.builtin.dnf 装包、copy 放文件、service 启动服务。模块名写全称，也就是 FQCN，这是现在推荐的写法。",
+        "参数记不住没关系，考场上能用 ansible-doc 查每个模块的参数和 EXAMPLES。平时就要练习只靠它查。"
+      ],
+      refs: [["RHCE-04 Playbook 基础", "notes/rhce/04-playbooks.md"], ["RHCE-03 模块与 ansible-doc", "notes/rhce/03-adhoc-modules-docs.md"]],
+      scene: function () {
+        var tasks = [["安装 httpd", "ansible.builtin.dnf"], ["放一个首页", "ansible.builtin.copy"], ["启动并开机自启", "ansible.builtin.service"]];
+        var s = '<g class="fade t-rhce" style="--d:0.1s"><rect class="frame" x="10" y="10" width="340" height="480" rx="10"/><text class="tx tcol bold" x="24" y="34" style="font-size:16px">playbook · site.yml</text></g>' +
+          '<g class="fade t-rhce" style="--d:0.4s"><rect class="frame" x="28" y="52" width="304" height="424" rx="10"/><text class="tx tcol bold" x="42" y="76" style="font-size:16px">play · hosts: web</text></g>';
+        tasks.forEach(function (t, i) { s += box(48, 100 + i * 122, 264, 100, "task：" + t[0], { t: "rhce", sub: t[1], fs: 19, d: 0.8 + i * 0.6 }); });
+        return '<div class="hs"><div class="cols2" style="align-items:start;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)">' +
+          '<div style="min-width:0">' + svg(500, s, "playbook 包含 play，play 包含 task，task 调用模块", 360) + "</div>" +
+          '<div style="min-width:0">' + code("- name: 部署 Web 服务\n  hosts: web\n  become: true\n  tasks:\n    - name: 安装 httpd\n      ansible.builtin.dnf:\n        name: httpd\n        state: present\n\n    - name: 放一个首页\n      ansible.builtin.copy:\n        content: \"hi {{ inventory_hostname }}\\n\"\n        dest: /var/www/html/index.html\n\n    - name: 启动并开机自启\n      ansible.builtin.service:\n        name: httpd\n        state: started\n        enabled: true", 1.0, 0.13) + "</div>" +
+          "</div></div>";
+      } },
+    { ch: "rhce", title: "幂等：跑两遍，结果一样",
+      say: [
+        "Ansible 的模块描述的是目标状态，比如「httpd 已安装并在运行」，而不是「执行安装命令」。所以第一次运行会报 changed；第二次运行时状态已经符合，全部是 ok，changed 等于 0。",
+        "这叫幂等。评分时你的 playbook 可能会被再跑一次，第二次不能报错，也不该再改动任何东西。",
+        "尽量少用 shell 和 command 模块，它们每次都会报 changed。实在要用，就配合 creates 或 changed_when。"
+      ],
+      refs: [["RHCE-06 循环、条件与错误处理", "notes/rhce/06-loops-conditions-errors.md"], ["RHCE 练习题", "labs/rhce/practice-set-1.md"]],
+      scene: function () {
+        return '<div class="hs">' + term("automation@control ~/ansible", [
+            ["c", "ansible-navigator run site.yml -m stdout", 0.2],
+            ["d", "TASK [Gathering Facts] ******************", 1.6],
+            ["g", "ok: [node1]", 1.8],
+            ["d", "TASK [安装 httpd] ************************", 2.0],
+            ["y", "changed: [node1]", 2.2],
+            ["d", "TASK [放一个首页] ************************", 2.4],
+            ["y", "changed: [node1]", 2.6],
+            ["d", "TASK [启动并开机自启] ********************", 2.8],
+            ["y", "changed: [node1]", 3.0],
+            ["o", "node1 : ok=4  changed=3  unreachable=0  failed=0", 3.4],
+            ["o", "", 3.6],
+            ["c", "ansible-navigator run site.yml -m stdout", 4.0],
+            ["d", "...", 5.4],
+            ["g", "node1 : ok=4  changed=0  unreachable=0  failed=0", 5.8]
+          ]) +
+          '<div class="cols2"><div class="card tl t-ok fade" ' + stg(6.3) + "><b>第二次 changed=0</b><br>说明 playbook 是幂等的，评分重跑也安全。</div>" +
+          '<div class="card tl t-rhce fade" ' + stg(6.6) + "><b>shell / command 每次都 changed</b><br>能用专用模块就别用它们，必要时加 <code>creates</code> 或 <code>changed_when</code>。</div></div></div>";
+      } },
+    { ch: "rhce", title: "变量、模板与 roles",
+      say: [
+        "同一份配置要发给很多台机器时，用 Jinja2 模板。模板里双花括号包起来的变量，会在每台机器上替换成它自己的值和 facts，生成各不相同的文件。",
+        "变量可以放在 group_vars、host_vars，或者 role 的 defaults 里。考试常问：同一个变量在几个地方都定义了，最后用的是哪个。所以变量优先级要搞清楚。",
+        "roles 把 tasks、handlers、templates、默认变量按固定目录组织起来，方便复用。到了 CKA 你会发现，Helm chart 就是 Kubernetes 世界里的 role。"
+      ],
+      refs: [["RHCE-07 Jinja2 模板", "notes/rhce/07-jinja2-templates.md"], ["RHCE-08 Roles", "notes/rhce/08-roles.md"], ["RHCE-05 变量与 facts", "notes/rhce/05-variables-facts.md"]],
+      scene: function () {
+        var s = box(20, 40, 300, 84, "index.html.j2", { t: "rhce", mono: true, sub: "Hello {{ inventory_hostname }}", fs: 19, d: 0.1 }) +
+          box(20, 160, 300, 84, "group_vars/web.yml", { t: "rhce", mono: true, sub: "http_port: 8080", fs: 18, d: 0.4 }) +
+          box(20, 280, 300, 84, "facts", { t: "rhce", mono: true, sub: "ansible_facts['hostname']", fs: 19, d: 0.7 }) +
+          arrow(322, 82, 382, 180, { t: "rhce", d: 1.1 }) + arrow(322, 202, 382, 202, { t: "rhce", d: 1.2 }) + arrow(322, 322, 382, 224, { t: "rhce", d: 1.3 }) +
+          box(384, 157, 140, 90, "template", { t: "rhce", solid: true, mono: true, sub: "模块", fs: 19, d: 1.6 });
+        ["node1", "node2", "node3"].forEach(function (n, i) {
+          s += arrow(526, 202, 558, 72 + i * 115, { t: "rhce", d: 2.0 + i * 0.25 });
+          s += box(560, 35 + i * 115, 140, 76, n, { t: "base", mono: true, sub: "Hello " + n, fs: 19, d: 2.2 + i * 0.25 });
+        });
+        var tree = ["roles/apache/", "├── tasks/main.yml", "├── handlers/main.yml", "├── templates/index.html.j2", "└── defaults/main.yml"];
+        tree.forEach(function (t, i) { s += txt(30, 410 + i * 25, t, { cls: "mono" + (i ? " muted" : " bold"), anchor: "start", fs: 15, d: 3.2 + i * 0.15 }); });
+        s += arrow(330, 460, 418, 460, { t: "cka", d: 4.2, dash: true });
+        s += txt(430, 445, "到了 CKA", { cls: "muted", anchor: "start", fs: 15, d: 4.3 });
+        s += txt(430, 475, "≈ Helm chart", { cls: "bold tcol", t: "cka", anchor: "start", fs: 24, d: 4.4 });
+        return svg(540, s, "模板加变量和 facts，由 template 模块为每台主机生成不同文件；role 目录结构");
+      } },
+    { ch: "rhce", title: "RHCE 的核心：把 RHCSA 再做一遍",
+      say: [
+        "EX294 的考纲里有一大块叫「用 Ansible 模块自动化 RHCSA 的标准任务」。左边每一项都是你刚学过的手工操作，右边是对应的模块。",
+        "还会考 collections 和 ansible-navigator。有些模块不在 ansible-core 里，比如 firewalld 在 ansible.posix，LVM 相关的在 community.general，要先装对应的 collection。密码之类的敏感变量要用 ansible-vault 加密。",
+        "这就是 RHCE 要紧跟着 RHCSA 考的原因：手工操作记得越清楚，playbook 写得越快。"
+      ],
+      refs: [["RHCE-11 自动化 RHCSA 任务", "notes/rhce/11-automate-rhcsa-tasks.md"], ["RHCE-09 Collections 与 navigator", "notes/rhce/09-collections-navigator.md"], ["RHCE-10 Vault", "notes/rhce/10-vault.md"]],
+      scene: function () {
+        var R = [["装软件、配仓库", "ansible.builtin.dnf · yum_repository"], ["启停服务", "ansible.builtin.service"], ["防火墙", "ansible.posix.firewalld"],
+                 ["LVM", "community.general.lvg · lvol"], ["格式化与挂载", "community.general.filesystem · ansible.posix.mount"], ["用户和组", "ansible.builtin.user · group"],
+                 ["计划任务", "ansible.builtin.cron"], ["SELinux", "ansible.posix.selinux · seboolean · community.general.sefcontext"], ["改配置文件", "ansible.builtin.lineinfile · template"]];
+        return '<div class="hs"><div class="map-wrap"><table class="map"><thead><tr><th>RHCSA 手工操作</th><th></th><th>RHCE 用的模块</th></tr></thead><tbody>' +
+          R.map(function (r, i) { return '<tr class="fade t-rhce" ' + stg(0.2 + i * 0.35) + '><td>' + r[0] + '</td><td class="arrow">→</td><td><code>' + r[1] + "</code></td></tr>"; }).join("") +
+          "</tbody></table></div>" +
+          '<div class="cols2"><div class="card tl t-rhce fade" ' + stg(3.6) + "><b>装 collection</b><br><code>ansible-galaxy collection install -r requirements.yml</code></div>" +
+          '<div class="card tl t-rhce fade" ' + stg(3.9) + "><b>保护密码</b><br><code>ansible-vault create secret.yml</code>，运行时加 <code>--vault-password-file</code></div></div></div>";
+      } },
+
+    /* ===== CKA ===== */
+    { ch: "cka", title: "CKA：一个 Kubernetes 集群长什么样",
+      say: [
+        "你熟悉的 Docker 管的是一台机器上的容器。Kubernetes 管的是一群机器，并让应用一直维持在你声明的状态。",
+        "集群分两部分。控制平面负责决策：kube-apiserver 是唯一入口，etcd 存所有状态，scheduler 决定 Pod 放到哪个节点，controller-manager 不断把实际状态往期望状态拉。",
+        "工作节点负责干活：kubelet 接收任务，通过 containerd 这样的容器运行时起容器，kube-proxy 维护 Service 的转发规则。CKA 的排错题，大多是这些组件中的某一个出了问题。"
+      ],
+      refs: [["CKA-01 集群架构", "notes/cka/01-architecture.md"], ["Docker → Podman → K8s", "notes/00-foundations/05-containers-docker-to-k8s.md"]],
+      scene: function () {
+        var s = frame(20, 30, 680, 222, { t: "cka", label: "控制平面 control plane", d: 0.1 }) +
+          box(40, 70, 200, 162, "kube-apiserver", { t: "cka", solid: true, mono: true, sub: "唯一入口", fs: 18, d: 0.3 }) +
+          box(260, 70, 200, 72, "etcd", { t: "cka", mono: true, sub: "存所有状态", fs: 20, d: 0.6 }) +
+          box(480, 70, 200, 72, "kube-scheduler", { t: "cka", mono: true, sub: "选节点", fs: 17, d: 0.8 }) +
+          box(260, 160, 420, 72, "kube-controller-manager", { t: "cka", mono: true, sub: "让实际状态趋近期望状态", fs: 18, d: 1.0 });
+        [20, 370].forEach(function (ox, k) {
+          s += frame(ox, 290, 330, 232, { t: "base", label: "节点 worker" + (k + 1), right: true, d: 1.4 + k * 0.2 });
+          s += box(ox + 20, 330, 140, 54, "kubelet", { t: "cka", mono: true, fs: 18, d: 1.7 + k * 0.2 });
+          s += box(ox + 170, 330, 140, 54, "kube-proxy", { t: "cka", mono: true, fs: 17, d: 1.8 + k * 0.2 });
+          s += box(ox + 20, 396, 290, 46, "containerd · CRI", { t: "base", mono: true, fs: 17, d: 2.0 + k * 0.2 });
+          for (var p = 0; p < 3; p++) s += box(ox + 20 + p * 100, 456, 90, 44, "Pod", { t: "base", fs: 16, d: 2.3 + k * 0.2 + p * 0.1 });
+          s += arrow(140, 234, ox + 90, 328, { t: "cka", dash: true, d: 2.9 });
+        });
+        return svg(540, s, "Kubernetes 集群：控制平面四个组件和两个工作节点");
+      } },
+    { ch: "cka", title: "kubectl apply 之后发生了什么",
+      say: [
+        "跟着编号看一次部署的全过程。第一步，kubectl 把 YAML 提交给 apiserver。第二步，apiserver 把期望状态写进 etcd。",
+        "第三步，控制器看到新的 Deployment，创建 ReplicaSet 和 Pod。第四步，调度器发现 Pod 还没有分配节点，选一个合适的节点绑定上去。",
+        "第五步，那个节点上的 kubelet 发现有分给自己的 Pod；第六步，它调用 containerd 拉镜像、起容器；第七步，把状态回报给 apiserver。注意，所有组件都只和 apiserver 通信，这是排错时定位问题的关键。"
+      ],
+      refs: [["CKA-01 集群架构", "notes/cka/01-architecture.md"], ["CKA-02 kubectl 高效操作", "notes/cka/02-kubectl-efficiency.md"]],
+      scene: function () {
+        return svg(540,
+          box(20, 60, 170, 64, "kubectl", { t: "base", mono: true, sub: "apply -f web.yaml", fs: 20, d: 0.1 }) +
+          box(275, 60, 170, 64, "apiserver", { t: "cka", solid: true, mono: true, fs: 20, d: 0.2 }) +
+          box(530, 60, 170, 64, "etcd", { t: "cka", mono: true, fs: 20, d: 0.3 }) +
+          box(20, 230, 170, 64, "控制器", { t: "cka", sub: "controller-manager", fs: 20, sfs: 13, d: 0.4 }) +
+          box(530, 230, 170, 64, "调度器", { t: "cka", sub: "kube-scheduler", fs: 20, d: 0.5 }) +
+          box(275, 410, 170, 64, "kubelet", { t: "cka", mono: true, sub: "worker2", fs: 20, d: 0.6 }) +
+          box(530, 410, 170, 64, "containerd", { t: "base", mono: true, sub: "拉镜像 · 起容器", fs: 19, d: 0.7 }) +
+          arrow(192, 92, 273, 92, { t: "cka", d: 1.2 }) + num(232, 62, "1", { d: 1.2 }) +
+          arrow(447, 92, 528, 92, { t: "cka", d: 2.2 }) + num(487, 62, "2", { d: 2.2 }) +
+          arrow(300, 126, 140, 228, { t: "cka", d: 3.2 }) + num(196, 162, "3", { d: 3.2 }) +
+          arrow(560, 228, 430, 126, { t: "cka", d: 4.2 }) + num(524, 162, "4", { d: 4.2 }) +
+          arrow(345, 126, 345, 408, { t: "cka", d: 5.2 }) + num(322, 290, "5", { d: 5.2 }) +
+          arrow(447, 442, 528, 442, { t: "cka", d: 6.2 }) + num(487, 412, "6", { d: 6.2 }) +
+          arrow(380, 408, 380, 126, { t: "ok", dash: true, d: 7.2 }) + num(404, 290, "7", { t: "ok", d: 7.2 }) +
+          txt(105, 390, "所有组件", { cls: "bold", fs: 20, d: 8.0 }) + txt(105, 420, "只和 apiserver", { cls: "bold", fs: 20, d: 8.0 }) + txt(105, 450, "通信", { cls: "bold", fs: 20, d: 8.0 }),
+          "kubectl apply 后的 7 个步骤：提交、写 etcd、控制器建 Pod、调度、kubelet、containerd、回报状态");
+      } },
+    { ch: "cka", title: "把 docker compose 翻译成 Kubernetes",
+      say: [
+        "用你熟悉的 compose 对照一下。compose 里的一个 service，在 Kubernetes 里通常拆成几个对象：Deployment 管 Pod 的副本和更新，Service 提供稳定的访问地址，ConfigMap 和 Secret 放配置，PVC 申请存储。",
+        "restart: always 对应控制器的自愈，Pod 挂了会被自动重建。depends_on 没有直接对应，一般用 initContainers 或就绪探针来处理启动顺序。",
+        "考试时能用命令生成的对象就别手写 YAML，比如 kubectl create deployment 加 --dry-run=client -o yaml，先生成骨架再改。"
+      ],
+      refs: [["Docker → Podman → K8s", "notes/00-foundations/05-containers-docker-to-k8s.md"], ["CKA-09 工作负载", "notes/cka/09-workloads.md"]],
+      scene: function () {
+        var R = [["services.web", "Deployment（管理一组 Pod 副本）"], ["image / command", "Pod 模板里的 containers"], ['ports: "8080:80"', "Service（ClusterIP / NodePort / LoadBalancer）"],
+                 ["environment / env_file", "ConfigMap / Secret"], ["volumes", "PersistentVolumeClaim"], ["restart: always", "控制器自愈：Pod 挂了自动重建"],
+                 ["depends_on", "无直接对应：initContainers / 就绪探针"], ["deploy.replicas", "spec.replicas / HPA 自动扩缩"], ["docker compose up -d", "kubectl apply -f"]];
+        return '<div class="hs"><div class="map-wrap"><table class="map t-cka"><thead><tr><th>docker compose</th><th></th><th>Kubernetes</th></tr></thead><tbody>' +
+          R.map(function (r, i) { return '<tr class="fade" ' + stg(0.2 + i * 0.3) + "><td><code style=\"color:var(--muted)\">" + esc(r[0]) + '</code></td><td class="arrow">→</td><td>' + esc(r[1]) + "</td></tr>"; }).join("") +
+          "</tbody></table></div>" +
+          term("考场技巧：先生成骨架", [["c", "kubectl create deploy web --image=nginx --replicas=3 --dry-run=client -o yaml > web.yaml", 3.2]]) + "</div>";
+      } },
+    { ch: "cka", title: "工作负载：滚动更新与回滚",
+      say: [
+        "改了 Deployment 的镜像版本，它会新建一个 ReplicaSet，然后一边起新 Pod，一边停旧 Pod，服务全程不中断。节奏由 maxSurge 和 maxUnavailable 控制。",
+        "新版本有问题时，kubectl rollout undo 一条命令就能回到上一个版本，kubectl rollout history 可以看历史版本。",
+        "这一块还会考 ConfigMap 和 Secret 注入配置、HPA 按 CPU 自动扩缩容，以及资源限制、节点亲和性、污点这些调度规则。"
+      ],
+      refs: [["CKA-09 工作负载", "notes/cka/09-workloads.md"], ["CKA-10 调度", "notes/cka/10-scheduling.md"]],
+      scene: function () {
+        var s = box(210, 20, 300, 70, "Deployment web", { t: "cka", solid: true, mono: true, sub: "web:v1 → web:v2", fs: 20, d: 0.1 }) +
+          box(30, 140, 310, 60, "ReplicaSet v1", { t: "base", mono: true, fs: 19, d: 0.3 }) +
+          arrow(300, 92, 190, 138, { t: "mute", d: 0.4 }) +
+          arrow(420, 92, 530, 138, { t: "cka", d: 1.0 }) +
+          box(380, 140, 310, 60, "ReplicaSet v2", { t: "cka", mono: true, fs: 19, d: 1.1 });
+        for (var i = 0; i < 3; i++) {
+          s += box(45 + i * 100, 240, 85, 70, "Pod", { t: "base", sub: "v1", fs: 18, d: 0.5 + i * 0.1, d2: 2.4 + i * 1.2 });
+          s += box(395 + i * 100, 240, 85, 70, "Pod", { t: "cka", sub: "v2", fs: 18, d: 1.8 + i * 1.2 });
+        }
+        s += txt(30, 380, "kubectl set image deploy/web web=web:v2", { cls: "mono", anchor: "start", fs: 16, d: 0.6 });
+        s += txt(30, 415, "kubectl rollout status deploy/web", { cls: "mono", anchor: "start", fs: 16, d: 5.4 });
+        s += txt(30, 450, "kubectl rollout undo deploy/web     # 回滚", { cls: "mono", anchor: "start", fs: 16, d: 5.8 });
+        s += txt(30, 500, "默认策略 RollingUpdate：maxSurge 25%，maxUnavailable 25%", { cls: "muted", anchor: "start", fs: 15, d: 6.2 });
+        return svg(540, s, "滚动更新：新 ReplicaSet 逐个起新 Pod，旧 Pod 逐个停止");
+      } },
+    { ch: "cka", title: "网络：从入口到 Pod",
+      say: [
+        "外部请求先到 Gateway，由 HTTPRoute 按路径或域名转发到 Service。Gateway API 是新版考纲加入的内容，Ingress 也仍然要会。",
+        "Service 用标签选择器找到后端 Pod，并提供一个固定的名字，比如 api.shop.svc.cluster.local，这个名字由 CoreDNS 解析。Service 不通时，第一件事是看它有没有 endpoints，多数情况是 selector 写错了。",
+        "NetworkPolicy 是 Pod 之间的防火墙：图里只允许 frontend 访问 api，其他 Pod 都被拦住。写 egress 规则时，别忘了放行 DNS。"
+      ],
+      refs: [["CKA-11 Service 与 CoreDNS", "notes/cka/11-services-dns.md"], ["CKA-12 NetworkPolicy", "notes/cka/12-network-policy.md"], ["CKA-13 Ingress 与 Gateway API", "notes/cka/13-ingress-gateway-api.md"]],
+      scene: function () {
+        var s = box(20, 40, 140, 64, "用户", { t: "base", sub: "HTTP 请求", fs: 20, d: 0.1 }) +
+          arrow(162, 72, 198, 72, { t: "cka", d: 0.3 }) +
+          box(200, 40, 200, 64, "Gateway", { t: "cka", mono: true, sub: "HTTPRoute: /api", fs: 20, d: 0.4 }) +
+          arrow(402, 72, 448, 72, { t: "cka", d: 0.7 }) +
+          box(450, 40, 250, 64, "Service api", { t: "cka", solid: true, mono: true, sub: "selector app=api", fs: 20, d: 0.8 }) +
+          frame(432, 150, 278, 340, { t: "cka", d: 1.2 }) +
+          txt(446, 474, "namespace: shop", { cls: "mono tcol", t: "cka", anchor: "start", fs: 15, d: 1.2 });
+        for (var i = 0; i < 3; i++) s += box(455, 175 + i * 58, 232, 46, "Pod · app=api", { t: "cka", mono: true, fs: 16, d: 1.4 + i * 0.15 });
+        s += arrow(575, 106, 575, 173, { t: "cka", d: 2.0 });
+        s += txt(570, 380, "CoreDNS 解析", { cls: "muted", fs: 15, d: 2.4 });
+        s += txt(570, 405, "api.shop.svc.cluster.local", { cls: "mono", fs: 14, d: 2.5 });
+        s += token("M162,72 L450,72 M575,106 L575,175", { t: "cka", begin: 2.6, dur: 2.4 });
+        s += box(30, 250, 200, 56, "frontend", { t: "ok", mono: true, sub: "Pod", fs: 18, d: 3.0 });
+        s += arrow(232, 278, 453, 255, { t: "ok", d: 3.3, label: "允许", lx: 330, ly: 250 });
+        s += box(30, 400, 200, 56, "其他 Pod", { t: "bad", fs: 18, d: 3.8 });
+        s += arrow(420, 165, 420, 470, { t: "bad", dash: true, noHead: true, d: 4.0 });
+        s += arrow(232, 428, 405, 428, { t: "bad", d: 4.3 });
+        s += txt(420, 428, "✕", { cls: "bold tcol", t: "bad", fs: 30, d: 4.8 });
+        s += txt(330, 508, "NetworkPolicy：只允许 frontend 访问 api", { cls: "bold tcol", t: "bad", fs: 17, d: 4.9 });
+        return svg(540, s, "请求经 Gateway 到 Service 再到 Pod；NetworkPolicy 只允许 frontend 访问 api");
+      } },
+    { ch: "cka", title: "存储：PVC 怎么拿到一块盘",
+      say: [
+        "Pod 不直接要磁盘，而是通过 PVC 提出需求：要多大、什么访问模式。PVC 指定了 StorageClass 时，供应器会自动创建一个合适的 PV，两者绑定。",
+        "没有 StorageClass 时就是静态供给：管理员先建好 PV，PVC 按容量和访问模式去匹配。",
+        "要分清访问模式：RWO 是单节点读写，RWX 是多节点读写。还有回收策略：Retain 会保留数据，Delete 会随 PVC 一起删除。这和 RHCSA 的 LVM 是同一个思路：先申请空间，再挂载使用。"
+      ],
+      refs: [["CKA-14 存储", "notes/cka/14-storage.md"], ["RHCSA-04 本地存储与 LVM", "notes/rhcsa/04-local-storage-lvm.md"]],
+      scene: function () {
+        return svg(540,
+          box(20, 210, 150, 80, "Pod", { t: "base", sub: "volumeMounts", fs: 22, d: 0.1 }) +
+          arrow(172, 250, 228, 250, { t: "cka", d: 0.6 }) +
+          box(230, 210, 180, 80, "PVC data", { t: "cka", solid: true, mono: true, sub: "5Gi · RWO", fs: 20, d: 0.7 }) +
+          arrow(412, 228, 468, 112, { t: "cka", d: 1.3, label: "storageClassName", lx: 448, ly: 160, anchor: "end" }) +
+          box(470, 50, 230, 80, "StorageClass", { t: "cka", mono: true, sub: "provisioner", fs: 20, d: 1.5 }) +
+          arrow(585, 132, 585, 378, { t: "cka", d: 2.0, label: "自动创建", lx: 600, ly: 255, anchor: "start" }) +
+          box(470, 380, 230, 80, "PV", { t: "cka", mono: true, sub: "5Gi · Delete", fs: 22, d: 2.4 }) +
+          arrow(468, 410, 412, 280, { t: "ok", d: 2.9, label: "Bound", lx: 420, ly: 360, anchor: "end" }) +
+          txt(360, 492, "RWO 单节点读写 · ROX 多节点只读 · RWX 多节点读写 · RWOP 单 Pod 读写", { fs: 15, d: 3.4 }) +
+          txt(360, 522, "回收策略：Retain 保留数据 · Delete 随 PVC 删除", { fs: 15, cls: "muted", d: 3.7 }),
+          "Pod 通过 PVC 申请存储，StorageClass 动态创建 PV 并绑定");
+      } },
+    { ch: "cka", title: "集群运维：搭建、升级、备份",
+      say: [
+        "CKA 占比最大的领域之一是集群本身：用 kubeadm 搭集群、升级版本、备份恢复 etcd。",
+        "升级一次只能升一个小版本。先在控制平面上执行 kubeadm upgrade plan 和 apply，再逐个处理节点：drain 腾空，升级 kubelet，重启服务，最后 uncordon 放回调度。",
+        "etcd 备份用 etcdctl snapshot save，要带上证书参数；恢复时用 etcdutl snapshot restore 到一个新目录，再修改 etcd 静态 Pod 清单里的数据目录。考纲还要求了解 Helm、Kustomize、CRD，以及 CNI、CSI、CRI 这些扩展接口。"
+      ],
+      refs: [["CKA-03 kubeadm 搭集群", "notes/cka/03-kubeadm-install.md"], ["CKA-04 升级与 etcd", "notes/cka/04-cluster-lifecycle.md"], ["CKA-07 Helm 与 Kustomize", "notes/cka/07-helm-kustomize.md"], ["CKA-08 扩展接口与 CRD", "notes/cka/08-extension-interfaces-crd.md"]],
+      scene: function () {
+        function col(title, items, d) {
+          return '<div class="card tl t-cka pop" ' + stg(d) + '><b style="font-family:var(--font-display)">' + title + '</b><ol style="margin-top:8px">' +
+            items.map(function (it, i) { return '<li class="fade" ' + stg(d + 0.3 + i * 0.35) + ">" + it[0] + (it[1] ? "<code>" + esc(it[1]) + "</code>" : "") + "</li>"; }).join("") + "</ol></div>";
+        }
+        return '<div class="hs"><div class="runbook">' +
+          col("搭建", [["所有节点：关 swap、内核模块、containerd", ""], ["控制平面", "kubeadm init --pod-network-cidr=…"], ["装 CNI 网络插件", "kubectl apply -f <cni>.yaml"], ["worker 加入", "kubeadm join … --token …"]], 0.1) +
+          col("升级（一次一个小版本）", [["控制平面", "kubeadm upgrade plan"], ["", "kubeadm upgrade apply v1.x.y"], ["腾空节点", "kubectl drain <node> --ignore-daemonsets"], ["升级 kubelet 后", "systemctl restart kubelet"], ["放回调度", "kubectl uncordon <node>"]], 1.6) +
+          col("etcd 备份与恢复", [["备份", "etcdctl snapshot save /opt/etcd.db --endpoints=https://127.0.0.1:2379 --cacert=… --cert=… --key=…"], ["恢复到新目录", "etcdutl snapshot restore /opt/etcd.db --data-dir /var/lib/etcd-restore"], ["改静态 Pod 清单的 hostPath", "/etc/kubernetes/manifests/etcd.yaml"]], 3.6) +
+          "</div></div>";
+      } },
+    { ch: "cka", title: "排错占 30%",
+      say: [
+        "排错是 CKA 权重最高的领域。好在思路是固定的：先看现象，再顺着组件往下查。",
+        "Pod 一直 Pending，多半是调度不上，用 describe 看事件。ImagePullBackOff 是镜像拉不下来。CrashLoopBackOff 是容器起来又退出，用 logs --previous 看上一次的日志。",
+        "节点 NotReady、控制平面组件挂了，就要 ssh 到节点上，用 systemctl、journalctl、crictl 查。这些正是 RHCSA 练出来的本事，所以 CKA 放在最后考最合适。"
+      ],
+      refs: [["CKA-15 排错", "notes/cka/15-troubleshooting.md"], ["CKA 模拟考", "labs/cka/mock-exam.md"]],
+      scene: function () {
+        var B = [["Pending", "调度不上：资源不够？污点？PVC 没绑定？", "kubectl describe pod <name>", "cka"],
+                 ["ImagePullBackOff", "镜像名或 tag 写错、私有仓库凭证缺失", "kubectl describe pod · 看 Events", "cka"],
+                 ["CrashLoopBackOff", "容器起来又退出：命令、配置、探针", "kubectl logs <pod> --previous", "cka"],
+                 ["Running 但访问不通", "selector、端口、NetworkPolicy、DNS", "kubectl get endpointslices", "cka"],
+                 ["节点 NotReady", "kubelet 或 containerd 出了问题", "systemctl status kubelet · journalctl -u kubelet", "rhcsa"],
+                 ["控制平面组件挂了", "静态 Pod 清单写错、证书过期", "crictl ps -a · /etc/kubernetes/manifests", "rhcsa"]];
+        return '<div class="hs tree">' +
+          '<div class="weight fade" ' + stg(0.1) + '><span>CKA 权重</span><span class="wb"><i style="flex:25;background:color-mix(in srgb,var(--cka) 45%,var(--surface))"></i><i style="flex:15;background:color-mix(in srgb,var(--cka) 30%,var(--surface))"></i><i style="flex:20;background:color-mix(in srgb,var(--cka) 60%,var(--surface))"></i><i style="flex:10;background:color-mix(in srgb,var(--cka) 20%,var(--surface))"></i><i style="flex:30;background:var(--cka)"></i></span><b style="color:var(--cka)">排错 30%</b></div>' +
+          '<span class="tree-root pop" ' + stg(0.4) + ">kubectl get pods -A · kubectl get nodes</span>" +
+          '<div class="branches">' + B.map(function (b, i) {
+            return '<div class="br t-' + b[3] + ' pop" ' + stg(0.8 + i * 0.4) + "><b>" + b[0] + "</b><span>" + b[1] + "</span><code>" + esc(b[2]) + "</code></div>";
+          }).join("") + "</div>" +
+          '<p class="fade" style="--d:3.4s;font-size:13px;color:var(--muted)">红色边框的两类要 ssh 到节点上，用 RHCSA 的 systemd / journalctl 功夫排查。</p></div>';
+      } },
+
+    /* ===== Go 运维开发 ===== */
+    { ch: "go", title: "为什么运维开发要学 Go",
+      say: [
+        "Go 不在三门考试里，但它是运维开发最常用的语言。你在 CKA 里接触的 Kubernetes、etcd、containerd，还有 Prometheus 和 Helm，都是用 Go 写的。",
+        "Go 编译出来是一个静态二进制文件，复制到任何一台 RHEL 上就能运行，不用装解释器和依赖。写巡检工具、exporter、Kubernetes 控制器，Go 都是首选。",
+        "所以这份计划里，Go 是和考试并行的第四条线：每周 3 到 4 小时，考试周暂停。"
+      ],
+      refs: [["Go 轨道总览", "notes/go/README.md"], ["G1 环境与工具链", "notes/go/01-toolchain-modules.md"], ["Go 环境搭建", "labs/go/00-setup.md"]],
+      scene: function () {
+        var tools = ["Kubernetes", "etcd", "containerd", "Prometheus", "Helm", "Terraform"];
+        var s = txt(360, 40, "你在 CKA 里用到的这些工具", { cls: "bold muted", fs: 18, d: 0.1 });
+        tools.forEach(function (t, i) {
+          s += box(40 + (i % 3) * 220, 64 + Math.floor(i / 3) * 86, 200, 66, t, { t: "go", sub: "Go 编写", mono: true, fs: 20, d: 0.3 + i * 0.25 });
+        });
+        s += txt(360, 262, "全部是 Go 写的", { cls: "bold tcol", t: "go", fs: 22, d: 2.0 });
+        s += box(30, 320, 150, 72, "main.go", { t: "go", mono: true, sub: "你的工具", fs: 20, d: 2.4 });
+        s += arrow(182, 356, 248, 356, { t: "go", d: 2.8, label: "go build", ly: 340 });
+        s += box(250, 320, 210, 72, "静态二进制", { t: "go", solid: true, sub: "CGO_ENABLED=0", fs: 20, d: 3.0 });
+        s += arrow(462, 356, 518, 356, { t: "go", d: 3.4, label: "scp", ly: 340 });
+        s += box(520, 320, 170, 72, "RHEL 10", { t: "rhcsa", mono: true, sub: "直接运行", fs: 20, d: 3.6 });
+        s += token("M182,356 L520,356", { t: "go", begin: 4.0, dur: 2.2 });
+        s += txt(360, 470, "一个文件，没有依赖：最适合写运维工具", { cls: "bold", fs: 20, d: 4.2 });
+        return svg(540, s, "Kubernetes 等工具都用 Go 编写；Go 编译成静态二进制后可以直接复制到 RHEL 运行");
+      } },
+    { ch: "go", title: "Go 怎么穿插进 24 周",
+      say: [
+        "Go 每周学一个知识点，配 2 到 3 道 LeetCode，每隔一两周写一个运维小工具。这些小工具都和当时在学的考试内容挂钩。",
+        "RHCSA 阶段打语法和标准库的基础，用 Go 重写日志统计、fstab 检查、服务巡检。RHCE 阶段学模板、并发和 SSH，写一个迷你 Ansible。CKA 阶段学 client-go，写排错工具和 Prometheus exporter，最后用 kubebuilder 写一个 Operator。",
+        "考试周 Go 全部暂停，考试优先。"
+      ],
+      refs: [["每周穿插表", "notes/go/README.md"], ["11 个运维小项目", "labs/go/projects.md"]],
+      scene: function () {
+        var x0 = 20, u = 680 / 24, s = "";
+        [[0, 2, "base"], [2, 10, "rhcsa"], [10, 16, "rhce"], [16, 24, "cka"]].forEach(function (g, i) {
+          s += '<g class="pop t-' + g[2] + '" style="--d:' + (0.1 + i * 0.2) + 's"><rect class="bx solid" x="' + (x0 + g[0] * u + 1) + '" y="60" width="' + ((g[1] - g[0]) * u - 2) + '" height="34" rx="4"/></g>';
+        });
+        for (var w = 1; w <= 24; w++) {
+          if (w === 10 || w === 16 || w === 24) continue;
+          s += '<g class="pop t-go" style="--d:' + (1.0 + w * 0.04).toFixed(2) + 's"><rect class="bx solid" x="' + (x0 + (w - 1) * u + 2) + '" y="104" width="' + (u - 4) + '" height="14" rx="3"' + (w === 8 ? ' style="opacity:.45"' : "") + "/></g>";
+        }
+        s += txt(x0, 40, "考试", { cls: "bold muted", anchor: "start", fs: 15, d: 0.1 });
+        s += txt(700, 40, "Go：每周 3~4 h，考试周暂停", { cls: "bold tcol", t: "go", anchor: "end", fs: 15, d: 1.0 });
+        var C = [["rhcsa", "RHCSA 期间", "语法 · 标准库 · 测试 · 并发", ["P1 logstat", "P2 fstab-lint", "P3 svcwatch", "P4 portcheck"]],
+                 ["rhce", "RHCE 期间", "模板 · SSH · 拓扑排序 · TLS", ["P5 tmplgen", "P6 gossh", "P7 depsort", "P8 certcheck"]],
+                 ["cka", "CKA 期间", "容器化 · client-go · CRD", ["P9 kpods", "P10 cert-exporter", "P11 operator"]]];
+        C.forEach(function (c, i) {
+          var x = 20 + i * 235, d = 2.2 + i * 0.8;
+          s += box(x, 160, 210, 70, c[1], { t: c[0], sub: c[2], fs: 20, sfs: 13, d: d });
+          c[3].forEach(function (p, j) { s += box(x + 15, 250 + j * 52, 180, 40, p, { t: "go", mono: true, fs: 16, d: d + 0.3 + j * 0.15 }); });
+        });
+        s += txt(360, 500, "考试周（W10 · W16 · W24）Go 暂停", { cls: "muted", fs: 16, d: 4.8 });
+        return svg(540, s, "24 周时间轴下方是 Go 轨道；三个考试阶段各自对应的 Go 小项目");
+      } },
+    { ch: "go", title: "LeetCode 也挑运维场景",
+      say: [
+        "LeetCode 是练数据结构和手速的，我挑的题都尽量能对上运维场景。比如第 23 题合并 K 个升序链表，就是把多台主机上按时间排好序的日志合并成一份，正好练 Go 的 container/heap。",
+        "第 207 题课程表是拓扑排序，和服务依赖、Ansible role 依赖是同一个问题。第 1011 题是容量规划，第 743 题网络延迟时间是最短路，第 1192 题找关键连接，就是找网络里的单点故障。",
+        "每周 2 到 3 道，一共 56 道。卡住 30 分钟就看题解，第二天自己重写一遍。仓库里有脚本，一条命令就能生成题解和测试骨架。"
+      ],
+      refs: [["LeetCode 刷题计划", "labs/go/leetcode-plan.md"], ["G15 用 Go 刷 LeetCode", "notes/go/15-leetcode-in-go.md"], ["题解目录说明", "go/leetcode/README.md"]],
+      scene: function () {
+        var R = [["23", "合并 K 个升序链表", "合并多台主机按时间排序的日志"], ["207", "课程表", "服务 / role 依赖排序，发现循环依赖"],
+                 ["981", "基于时间的键值存储", "像 etcd 一样按版本读历史值"], ["1011", "在 D 天内送达包裹的能力", "容量规划：最少要多大吞吐"],
+                 ["743", "网络延迟时间", "消息在网络里多久传遍所有节点"], ["1192", "查找集群内的关键连接", "找出网络中的单点故障"],
+                 ["146", "LRU 缓存", "缓存淘汰：map + container/list"]];
+        return '<div class="hs"><div class="map-wrap"><table class="map t-go"><thead><tr><th>LeetCode</th><th></th><th>运维场景</th></tr></thead><tbody>' +
+          R.map(function (r, i) { return '<tr class="fade" ' + stg(0.2 + i * 0.35) + '><td><code>' + r[0] + "</code> " + esc(r[1]) + '</td><td class="arrow">→</td><td>' + esc(r[2]) + "</td></tr>"; }).join("") +
+          "</tbody></table></div>" +
+          term("~/RHCE-CKA", [
+            ["c", "./scripts/new-leetcode.sh 146", 3.0],
+            ["d", "# 生成 go/leetcode/0146-lru-cache/ 下的 solution.go 和 solution_test.go", 3.9],
+            ["c", "cd go && go test ./leetcode/...", 4.4],
+            ["g", "ok  	github.com/guiguisocute/RHCE-CKA/go/leetcode/0001-two-sum", 5.4]
+          ]) + "</div>";
+      } },
+
+    /* ===== 串起来 ===== */
+    { ch: "wrap", title: "三门考试其实是一张网",
+      say: [
+        "最后把三门串起来。每一行从左到右，是同一个知识在三门考试里的样子。",
+        "RHCSA 里手工建的 LVM，在 RHCE 里用 lvol 和 filesystem 模块自动化，到了 CKA 变成 PV 和 PVC。systemd 和 journalctl 是 RHCSA 的考点，也是 CKA 排查 kubelet 的工具。Jinja2 模板和 Helm 模板是同一种思路。",
+        "仓库里每篇笔记的顶部都写了这些关联，学的时候顺着链接跳，记得更牢。"
+      ],
+      refs: [["全局知识地图", "notes/README.md"]],
+      scene: function () {
+        var H = [["RHCSA", "rhcsa", 125], ["RHCE", "rhce", 360], ["CKA", "cka", 595]];
+        var R = [[["LVM / XFS", "lvcreate · mkfs"], ["lvol / filesystem", "community.general"], ["PV / PVC", "StorageClass"]],
+                 [["systemd", "journalctl -u"], ["service 模块", "ansible.builtin"], ["kubelet 排错", "systemctl · journalctl"]],
+                 [["nmcli / firewalld", "sysctl · 内核模块"], ["firewalld 模块", "ansible.posix"], ["节点准备", "kubeadm 前置检查"]],
+                 [["Shell 脚本", "变量 · 循环"], ["Jinja2 模板", "{{ 变量 }}"], ["Helm 模板", "{{ .Values }}"]]];
+        var s = "";
+        H.forEach(function (h) { s += txt(h[2], 50, h[0], { cls: "bold tcol", t: h[1], fs: 22, d: 0.1 }); });
+        R.forEach(function (row, r) {
+          var y = 84 + r * 110, d = 0.4 + r * 0.9;
+          row.forEach(function (c, k) {
+            s += box(20 + k * 235, y, 210, 80, c[0], { t: H[k][1], sub: c[1], fs: 19, mono: false, d: d + k * 0.25 });
+            if (k < 2) s += arrow(232 + k * 235, y + 40, 253 + k * 235, y + 40, { t: H[k + 1][1], d: d + k * 0.25 + 0.15 });
+          });
+        });
+        s += txt(360, 524, "同一个知识点，三种用法", { cls: "bold", fs: 18, d: 4.2 });
+        return svg(540, s, "同一知识点在 RHCSA、RHCE、CKA 中的三种形态");
+      } },
+    { ch: "wrap", title: "你的 24 周",
+      say: [
+        "整个计划是 24 周，考试每周 12 到 15 小时：先用 2 周准备环境，RHCSA 8 周，RHCE 6 周，CKA 8 周，每门的最后一周是模拟考和正式考试。Go 每周再加 3 到 4 小时，考试周暂停。",
+        "每天的节奏是：15 分钟复习错题，40 分钟读一个知识点，35 分钟在虚拟机里动手。周末做一次计时练习。",
+        "下一步，打开学习路线页面，从第 1 周开始：申请免费的红帽开发者订阅，装好两台 RHEL 10 虚拟机。导览就到这里，祝你三门都一次通过。"
+      ],
+      refs: [["24 周学习路线", "index.html"], ["第 1 周：搭实验环境", "labs/rhcsa/00-lab-setup.md"], ["错题本", "journal/mistakes.md"]],
+      scene: function () {
+        var x0 = 20, u = 680 / 24;
+        var seg = [[0, 2, "base", "准备"], [2, 10, "rhcsa", "RHCSA 8 周"], [10, 16, "rhce", "RHCE 6 周"], [16, 24, "cka", "CKA 8 周"]];
+        var s = "";
+        seg.forEach(function (g, i) {
+          var x = x0 + g[0] * u, w = (g[1] - g[0]) * u;
+          s += '<g class="pop t-' + g[2] + '" style="--d:' + (0.2 + i * 0.4) + 's"><rect class="bx solid" x="' + (x + 1) + '" y="120" width="' + (w - 2) + '" height="50" rx="4"/>' +
+            (i ? '<text class="lb" x="' + (x + w / 2) + '" y="145" style="font-size:18px;fill:var(--surface)">' + g[3] + "</text>" : "") + "</g>";
+        });
+        s += txt(x0 + u, 200, "准备 2 周", { cls: "muted", fs: 14, d: 0.3 });
+        for (var gw = 1; gw <= 24; gw++) {
+          if (gw === 10 || gw === 16 || gw === 24) continue;
+          s += '<g class="pop t-go" style="--d:' + (1.2 + gw * 0.03).toFixed(2) + 's"><rect class="bx solid" x="' + (x0 + (gw - 1) * u + 2) + '" y="174" width="' + (u - 4) + '" height="6" rx="2"/></g>';
+        }
+        [[10, "rhcsa", "EX200"], [16, "rhce", "EX294"], [24, "cka", "CKA"]].forEach(function (e, i) {
+          var x = x0 + e[0] * u;
+          s += '<g class="pop t-' + e[1] + '" style="--d:' + (2.0 + i * 0.3) + 's"><rect class="bx solid" x="' + (x - 8) + '" y="96" width="16" height="16" transform="rotate(45 ' + x + ' 104)"/></g>';
+          s += txt(i === 2 ? x - 4 : x, 76, e[2] + " · 第 " + e[0] + " 周", { cls: "bold tcol", t: e[1], fs: 15, anchor: i === 2 ? "end" : "middle", d: 2.1 + i * 0.3 });
+        });
+        [10, 16, 24].forEach(function (w) { s += txt(x0 + w * u, 200, "W" + w, { cls: "mono muted", fs: 13, d: 1.8, anchor: w === 24 ? "end" : "middle" }); });
+        s += txt(700, 214, "紫色细条 = Go 轨道", { cls: "tcol", t: "go", anchor: "end", fs: 13, d: 2.0 });
+        [["15 min", "复习错题"], ["40 min", "读一个知识点"], ["35 min", "虚拟机里动手"]].forEach(function (r, i) {
+          s += box(20 + i * 235, 250, 210, 90, r[0], { t: "base", sub: r[1], mono: true, fs: 24, d: 3.0 + i * 0.3 });
+        });
+        s += txt(360, 232, "每天 90 分钟", { cls: "bold muted", fs: 16, d: 2.9 });
+        s += txt(360, 420, "下一步：打开学习路线，从第 1 周开始", { cls: "bold", fs: 22, d: 4.2 });
+        s += txt(360, 455, "申请免费的红帽开发者订阅，装好两台 RHEL 10 虚拟机", { cls: "muted", fs: 16, d: 4.5 });
+        return svg(520, s, "24 周时间轴：准备 2 周、RHCSA 8 周、RHCE 6 周、CKA 8 周，以及每天 90 分钟的节奏");
+      } }
+  ];
+
+  /* ---------- 状态与渲染 ---------- */
+  var stage = document.getElementById("stage"), elTitle = document.getElementById("title"), elSay = document.getElementById("say"),
+      elRefs = document.getElementById("refs"), elChap = document.getElementById("chap"), elPos = document.getElementById("pos"),
+      elCounter = document.getElementById("counter"), btnPrev = document.getElementById("prev"), btnNext = document.getElementById("next"),
+      btnTts = document.getElementById("tts"), btnAuto = document.getElementById("auto"), btnReplay = document.getElementById("replay"),
+      talk = document.getElementById("talk"), rail = document.getElementById("rail");
+  var cur = 0, seen = {}, ttsOn = false, autoOn = false, timer = null, speakToken = 0;
+
+  function chapterOf(i) { for (var k = 0; k < CHAPTERS.length; k++) if (CHAPTERS[k].id === STEPS[i].ch) return CHAPTERS[k]; }
+
+  /* 章节导轨 */
+  var tickEls = [];
+  CHAPTERS.forEach(function (c) {
+    var idx = []; STEPS.forEach(function (s, i) { if (s.ch === c.id) idx.push(i); });
+    var wrap = document.createElement("div");
+    wrap.className = "chap t-" + c.t; wrap.style.setProperty("--n", idx.length); wrap.dataset.ch = c.id;
+    wrap.innerHTML = '<span class="chap-name">' + esc(c.name) + '</span><span class="ticks"></span>';
+    var ticks = wrap.querySelector(".ticks");
+    idx.forEach(function (i) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "tick"; b.setAttribute("aria-label", "第 " + (i + 1) + " 步：" + STEPS[i].title); b.title = STEPS[i].title;
+      b.addEventListener("click", function () { go(i); });
+      ticks.appendChild(b); tickEls[i] = b;
+    });
+    rail.appendChild(wrap);
+  });
+
+  function render(i) {
+    var s = STEPS[i], c = chapterOf(i);
+    stage.innerHTML = s.scene();
+    talk.className = "talk t-" + c.t;
+    var inCh = STEPS.filter(function (x) { return x.ch === s.ch; }), pos = inCh.indexOf(s) + 1;
+    elChap.textContent = c.name;
+    elPos.textContent = "本章 " + pos + " / " + inCh.length;
+    elTitle.textContent = s.title;
+    elSay.innerHTML = s.say.map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("");
+    elRefs.innerHTML = "<span>相关笔记</span>" + s.refs.map(function (r) { return '<a href="' + esc(href(r[1])) + '"' + (LOCAL ? "" : ' target="_blank" rel="noopener"') + ">" + esc(r[0]) + "</a>"; }).join("");
+    elCounter.textContent = (i + 1) + " / " + STEPS.length;
+    btnPrev.disabled = i === 0;
+    btnNext.textContent = i === STEPS.length - 1 ? "从头再看" : "下一步 →";
+    tickEls.forEach(function (t, k) { t.classList.toggle("cur", k === i); t.classList.toggle("seen", !!seen[k] && k !== i); });
+    document.querySelectorAll(".chap").forEach(function (w) { w.classList.toggle("on", w.dataset.ch === s.ch); });
+  }
+
+  function go(i) {
+    if (i < 0) i = 0;
+    if (i >= STEPS.length) i = 0;
+    seen[cur] = true; cur = i; seen[i] = true;
+    render(i);
+    try { history.replaceState(null, "", "#s" + (i + 1)); } catch (e) { /* 不支持时忽略 */ }
+    try { localStorage.setItem("rhce-cka-tour-step", String(i)); } catch (e) { /* 存储不可用时忽略 */ }
+    narrate();
+  }
+
+  /* ---------- 朗读与连播 ---------- */
+  var synth = ("speechSynthesis" in window) ? window.speechSynthesis : null;
+  if (!synth) { btnTts.disabled = true; document.getElementById("tts-note").hidden = false; }
+  function zhVoice() {
+    if (!synth) return null;
+    var vs = synth.getVoices() || [];
+    return vs.filter(function (v) { return /^zh(-|_)?(CN|Hans)?/i.test(v.lang) && /CN|Hans|中文|普通话|Mandarin/i.test(v.lang + v.name); })[0] ||
+           vs.filter(function (v) { return /^zh/i.test(v.lang); })[0] || null;
+  }
+  function clearTimer() { if (timer) { clearTimeout(timer); timer = null; } }
+  function stopSpeech() { speakToken++; if (synth) synth.cancel(); elSay.querySelectorAll("p").forEach(function (p) { p.classList.remove("speaking"); }); }
+  function afterNarration() { if (autoOn && cur < STEPS.length - 1) timer = setTimeout(function () { go(cur + 1); }, 900); }
+  function narrate() {
+    clearTimer(); stopSpeech();
+    if (ttsOn && synth) {
+      var token = speakToken, paras = elSay.querySelectorAll("p"), chunks = [];
+      STEPS[cur].say.forEach(function (p, pi) {
+        p.split(/(?<=[。！？])/).forEach(function (sent) { if (sent.trim()) chunks.push([sent, pi]); });
+      });
+      chunks.unshift([STEPS[cur].title + "。", -1]);
+      var voice = zhVoice();
+      chunks.forEach(function (ck, k) {
+        var u = new SpeechSynthesisUtterance(ck[0].replace(/--/g, " ").replace(/\//g, " "));
+        u.lang = "zh-CN"; u.rate = 1.05; if (voice) u.voice = voice;
+        u.onstart = function () { if (token !== speakToken) return; paras.forEach(function (p, pi) { p.classList.toggle("speaking", pi === ck[1]); }); };
+        if (k === chunks.length - 1) u.onend = function () { if (token !== speakToken) return; paras.forEach(function (p) { p.classList.remove("speaking"); }); afterNarration(); };
+        synth.speak(u);
+      });
+    } else if (autoOn) {
+      var len = STEPS[cur].say.join("").length;
+      timer = setTimeout(function () { if (cur < STEPS.length - 1) go(cur + 1); }, Math.max(7000, len * 210));
+    }
+  }
+  btnTts.addEventListener("click", function () {
+    ttsOn = !ttsOn; btnTts.setAttribute("aria-pressed", String(ttsOn)); btnTts.textContent = ttsOn ? "朗读中" : "朗读";
+    if (ttsOn) narrate(); else { stopSpeech(); clearTimer(); if (autoOn) narrate(); }
+  });
+  btnAuto.addEventListener("click", function () {
+    autoOn = !autoOn; btnAuto.setAttribute("aria-pressed", String(autoOn));
+    if (!autoOn) clearTimer(); else if (!ttsOn || (synth && !synth.speaking)) narrate();
+  });
+  btnPrev.addEventListener("click", function () { go(cur - 1); });
+  btnNext.addEventListener("click", function () { go(cur + 1); });
+  btnReplay.addEventListener("click", function () { stage.innerHTML = STEPS[cur].scene(); });
+  var btnZoom = document.getElementById("zoom");
+  btnZoom.addEventListener("click", function () {
+    var on = !stage.classList.contains("zoom");
+    stage.classList.toggle("zoom", on); btnZoom.setAttribute("aria-pressed", String(on)); btnZoom.textContent = on ? "适应屏幕" : "放大图解";
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.target && /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+    if (e.key === "ArrowRight" || e.key === "PageDown") { e.preventDefault(); go(cur + 1); }
+    else if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); go(cur - 1); }
+  });
+  if (synth && "onvoiceschanged" in synth) synth.onvoiceschanged = function () {};
+
+  /* 起始步：链接里的 #s12 优先，其次是上次看到的位置 */
+  var start = 0, m = /^#s(\d+)$/.exec(location.hash || "");
+  if (m) start = Math.min(Math.max(parseInt(m[1], 10) - 1, 0), STEPS.length - 1);
+  else { try { var saved = parseInt(localStorage.getItem("rhce-cka-tour-step"), 10); if (saved >= 0 && saved < STEPS.length) start = saved; } catch (e) { /* 忽略 */ } }
+  cur = start; seen[start] = true; render(start);
+})();
+</script>
+</body>
+</html>
