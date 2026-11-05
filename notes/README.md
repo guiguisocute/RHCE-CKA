@@ -75,6 +75,18 @@ flowchart LR
   S6 --> K3
   E7 -.类比.-> K7
   E8 -.类比.-> K7
+  subgraph G[Go · 运维开发（并行线）]
+    G1[工具链] --> G2[语法/错误] --> G3[slice/map/struct] --> G4[接口/泛型] --> G5[运维标准库] --> G6[测试]
+    G4 --> G7[并发/context] --> G8[网络/HTTP/TLS] --> G11[容器化部署] --> G14[可观测性]
+    G5 --> G9[配置/模板/CLI] --> G10[SSH 并行执行]
+    G7 --> G12[client-go] --> G13[Controller/Operator]
+    G3 --> G15[LeetCode 写法]
+  end
+  S2 -.重写成 Go.-> G5
+  E7 -.同类模板.-> G9
+  K7 -.Helm 就是 Go 模板.-> G9
+  E1 -.类比.-> G10
+  K8 -.实现.-> G13
 ```
 
 ## 节点清单
@@ -142,3 +154,23 @@ flowchart LR
 | K13 | [Ingress 与 Gateway API](cka/13-ingress-gateway-api.md) | Services & Networking (20%) |
 | K14 | [存储：PV/PVC/StorageClass](cka/14-storage.md) | Storage (10%) |
 | K15 | [排错](cka/15-troubleshooting.md) | Troubleshooting (30%) |
+
+### Go · 运维开发（[`go/`](go/README.md)，和三门考试并行，每周 3~4 小时）
+
+| # | 笔记 | 一句话 |
+|---|---|---|
+| G1 | [环境、模块与工具链](go/01-toolchain-modules.md) | `go mod`、交叉编译出静态二进制 |
+| G2 | [基础语法与错误处理](go/02-basics-errors.md) | 变量、控制流、函数、`error` |
+| G3 | [slice、map、struct 与指针](go/03-composite-types.md) | 运维数据最常用的三种结构 |
+| G4 | [方法、接口与泛型](go/04-methods-interfaces-generics.md) | `io.Reader/Writer`，client-go 里到处是接口 |
+| G5 | [运维常用标准库](go/05-stdlib-files-text-exec.md) | 文件、文本、正则、调用命令 |
+| G6 | [测试与工程化](go/06-testing-tooling.md) | 表驱动测试、`-race`、项目布局 |
+| G7 | [并发：goroutine、channel、context](go/07-concurrency-context.md) | worker pool、限并发、超时 |
+| G8 | [网络、HTTP 与 TLS](go/08-net-http-tls.md) | 健康检查、证书过期检查 |
+| G9 | [配置、模板与 CLI](go/09-config-template-cli.md) | YAML、`text/template`（Helm 同款）、cobra |
+| G10 | [SSH 远程执行与并行任务](go/10-ssh-parallel-exec.md) | 一个迷你 Ansible |
+| G11 | [容器化与在 K8s 上运行](go/11-containerize-deploy.md) | 多阶段构建、探针、优雅退出 |
+| G12 | [client-go](go/12-client-go.md) | 用代码做 kubectl 做的事 |
+| G13 | [Controller 与 Operator](go/13-controller-operator.md) | reconcile 循环、kubebuilder |
+| G14 | [可观测性与 exporter](go/14-observability-exporter.md) | slog、Prometheus 指标 |
+| G15 | [用 Go 刷 LeetCode](go/15-leetcode-in-go.md) | 堆、链表、并查集、BFS 模板 |

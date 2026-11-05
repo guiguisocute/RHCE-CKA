@@ -1,0 +1,1 @@
+go.dev 网站内容采用 CC BY 4.0，代码采用 BSD 许可证（见 LICENSE）。来源：https://github.com/golang/website/tree/master/_content/doc

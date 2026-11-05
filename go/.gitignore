@@ -1,0 +1,5 @@
+# 编译产物
+bin/
+*.test
+*.out
+cover.html

@@ -22,6 +22,7 @@
   --rhcsa: #b8322b;
   --rhce: #a86400;
   --cka: #2c5bc6;
+  --go: #6b4fbf;
   --ok: #1d7a46;
   --bad: #c0392b;
   --accent: #0d7468;
@@ -38,14 +39,14 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --paper: #0f141a; --surface: #161d26; --stage: #131a22; --grid: #1e2732; --ink: #e5eaf1; --muted: #9aa5b4; --line: #2a3340;
-    --base: #9eb0c6; --rhcsa: #ff7a70; --rhce: #f2a640; --cka: #85a8ff; --ok: #5fd08a; --bad: #ff7a70;
+    --base: #9eb0c6; --rhcsa: #ff7a70; --rhce: #f2a640; --cka: #85a8ff; --go: #b49cff; --ok: #5fd08a; --bad: #ff7a70;
     --accent: #3cc4b3; --accent-ink: #062521; --term-bg: #0b1016; --term-ink: #dfe6ee; --term-dim: #7f8c9c; --term-ok: #7bd88f; --term-warn: #f0c060;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --paper: #0f141a; --surface: #161d26; --stage: #131a22; --grid: #1e2732; --ink: #e5eaf1; --muted: #9aa5b4; --line: #2a3340;
-  --base: #9eb0c6; --rhcsa: #ff7a70; --rhce: #f2a640; --cka: #85a8ff; --ok: #5fd08a; --bad: #ff7a70;
+  --base: #9eb0c6; --rhcsa: #ff7a70; --rhce: #f2a640; --cka: #85a8ff; --go: #b49cff; --ok: #5fd08a; --bad: #ff7a70;
   --accent: #3cc4b3; --accent-ink: #062521; --term-bg: #0b1016; --term-ink: #dfe6ee; --term-dim: #7f8c9c; --term-ok: #7bd88f; --term-warn: #f0c060;
   color-scheme: dark;
 }
@@ -60,7 +61,7 @@ p { margin: 0; }
 code { font-family: var(--font-mono); font-size: .88em; }
 
 .wrap { max-width: 1240px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-.t-base { --t: var(--base); } .t-rhcsa { --t: var(--rhcsa); } .t-rhce { --t: var(--rhce); } .t-cka { --t: var(--cka); }
+.t-base { --t: var(--base); } .t-rhcsa { --t: var(--rhcsa); } .t-rhce { --t: var(--rhce); } .t-cka { --t: var(--cka); } .t-go { --t: var(--go); }
 .t-ok { --t: var(--ok); } .t-bad { --t: var(--bad); } .t-mute { --t: var(--muted); }
 
 header .wrap { padding-block: 22px 12px; display: flex; flex-wrap: wrap; gap: 6px 24px; align-items: end; justify-content: space-between; }
@@ -240,7 +241,7 @@ header .hint { color: var(--muted); font-size: 13px; }
 <header>
   <div class="wrap">
     <div style="display: grid; gap: 4px;">
-      <span class="eyebrow">考试导览 · 25 步 · 约 15 分钟</span>
+      <span class="eyebrow">考试导览 · 28 步 · 约 17 分钟</span>
       <h1>RHCE 与 CKA 考试导览</h1>
       <p class="hint">点「下一步」或按键盘 → 前进；打开「朗读」可以听讲解，打开「连播」会自动讲下去。</p>
     </div>
@@ -285,7 +286,7 @@ header .hint { color: var(--muted); font-size: 13px; }
   function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
 
   /* ---------- SVG 绘图小工具 ---------- */
-  var TRACK_IDS = ["base", "rhcsa", "rhce", "cka", "ok", "bad", "mute"];
+  var TRACK_IDS = ["base", "rhcsa", "rhce", "cka", "go", "ok", "bad", "mute"];
   var DEFS = "<defs>" + TRACK_IDS.map(function (t) {
     return '<marker id="ah-' + t + '" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="ah t-' + t + '" d="M0,0 L10,5 L0,10 z"/></marker>';
   }).join("") + "</defs>";
@@ -372,6 +373,7 @@ header .hint { color: var(--muted); font-size: 13px; }
     { id: "rhcsa", name: "RHCSA · EX200", t: "rhcsa" },
     { id: "rhce", name: "RHCE · EX294", t: "rhce" },
     { id: "cka", name: "CKA", t: "cka" },
+    { id: "go", name: "Go 运维开发", t: "go" },
     { id: "wrap", name: "串起来", t: "base" }
   ];
 
@@ -906,6 +908,82 @@ header .hint { color: var(--muted); font-size: 13px; }
           '<p class="fade" style="--d:3.4s;font-size:13px;color:var(--muted)">红色边框的两类要 ssh 到节点上，用 RHCSA 的 systemd / journalctl 功夫排查。</p></div>';
       } },
 
+    /* ===== Go 运维开发 ===== */
+    { ch: "go", title: "为什么运维开发要学 Go",
+      say: [
+        "Go 不在三门考试里，但它是运维开发最常用的语言。你在 CKA 里接触的 Kubernetes、etcd、containerd，还有 Prometheus 和 Helm，都是用 Go 写的。",
+        "Go 编译出来是一个静态二进制文件，复制到任何一台 RHEL 上就能运行，不用装解释器和依赖。写巡检工具、exporter、Kubernetes 控制器，Go 都是首选。",
+        "所以这份计划里，Go 是和考试并行的第四条线：每周 3 到 4 小时，考试周暂停。"
+      ],
+      refs: [["Go 轨道总览", "notes/go/README.md"], ["G1 环境与工具链", "notes/go/01-toolchain-modules.md"], ["Go 环境搭建", "labs/go/00-setup.md"]],
+      scene: function () {
+        var tools = ["Kubernetes", "etcd", "containerd", "Prometheus", "Helm", "Terraform"];
+        var s = txt(360, 40, "你在 CKA 里用到的这些工具", { cls: "bold muted", fs: 18, d: 0.1 });
+        tools.forEach(function (t, i) {
+          s += box(40 + (i % 3) * 220, 64 + Math.floor(i / 3) * 86, 200, 66, t, { t: "go", sub: "Go 编写", mono: true, fs: 20, d: 0.3 + i * 0.25 });
+        });
+        s += txt(360, 262, "全部是 Go 写的", { cls: "bold tcol", t: "go", fs: 22, d: 2.0 });
+        s += box(30, 320, 150, 72, "main.go", { t: "go", mono: true, sub: "你的工具", fs: 20, d: 2.4 });
+        s += arrow(182, 356, 248, 356, { t: "go", d: 2.8, label: "go build", ly: 340 });
+        s += box(250, 320, 210, 72, "静态二进制", { t: "go", solid: true, sub: "CGO_ENABLED=0", fs: 20, d: 3.0 });
+        s += arrow(462, 356, 518, 356, { t: "go", d: 3.4, label: "scp", ly: 340 });
+        s += box(520, 320, 170, 72, "RHEL 10", { t: "rhcsa", mono: true, sub: "直接运行", fs: 20, d: 3.6 });
+        s += token("M182,356 L520,356", { t: "go", begin: 4.0, dur: 2.2 });
+        s += txt(360, 470, "一个文件，没有依赖：最适合写运维工具", { cls: "bold", fs: 20, d: 4.2 });
+        return svg(540, s, "Kubernetes 等工具都用 Go 编写；Go 编译成静态二进制后可以直接复制到 RHEL 运行");
+      } },
+    { ch: "go", title: "Go 怎么穿插进 24 周",
+      say: [
+        "Go 每周学一个知识点，配 2 到 3 道 LeetCode，每隔一两周写一个运维小工具。这些小工具都和当时在学的考试内容挂钩。",
+        "RHCSA 阶段打语法和标准库的基础，用 Go 重写日志统计、fstab 检查、服务巡检。RHCE 阶段学模板、并发和 SSH，写一个迷你 Ansible。CKA 阶段学 client-go，写排错工具和 Prometheus exporter，最后用 kubebuilder 写一个 Operator。",
+        "考试周 Go 全部暂停，考试优先。"
+      ],
+      refs: [["每周穿插表", "notes/go/README.md"], ["11 个运维小项目", "labs/go/projects.md"]],
+      scene: function () {
+        var x0 = 20, u = 680 / 24, s = "";
+        [[0, 2, "base"], [2, 10, "rhcsa"], [10, 16, "rhce"], [16, 24, "cka"]].forEach(function (g, i) {
+          s += '<g class="pop t-' + g[2] + '" style="--d:' + (0.1 + i * 0.2) + 's"><rect class="bx solid" x="' + (x0 + g[0] * u + 1) + '" y="60" width="' + ((g[1] - g[0]) * u - 2) + '" height="34" rx="4"/></g>';
+        });
+        for (var w = 1; w <= 24; w++) {
+          if (w === 10 || w === 16 || w === 24) continue;
+          s += '<g class="pop t-go" style="--d:' + (1.0 + w * 0.04).toFixed(2) + 's"><rect class="bx solid" x="' + (x0 + (w - 1) * u + 2) + '" y="104" width="' + (u - 4) + '" height="14" rx="3"' + (w === 8 ? ' style="opacity:.45"' : "") + "/></g>";
+        }
+        s += txt(x0, 40, "考试", { cls: "bold muted", anchor: "start", fs: 15, d: 0.1 });
+        s += txt(700, 40, "Go：每周 3~4 h，考试周暂停", { cls: "bold tcol", t: "go", anchor: "end", fs: 15, d: 1.0 });
+        var C = [["rhcsa", "RHCSA 期间", "语法 · 标准库 · 测试 · 并发", ["P1 logstat", "P2 fstab-lint", "P3 svcwatch", "P4 portcheck"]],
+                 ["rhce", "RHCE 期间", "模板 · SSH · 拓扑排序 · TLS", ["P5 tmplgen", "P6 gossh", "P7 depsort", "P8 certcheck"]],
+                 ["cka", "CKA 期间", "容器化 · client-go · CRD", ["P9 kpods", "P10 cert-exporter", "P11 operator"]]];
+        C.forEach(function (c, i) {
+          var x = 20 + i * 235, d = 2.2 + i * 0.8;
+          s += box(x, 160, 210, 70, c[1], { t: c[0], sub: c[2], fs: 20, sfs: 13, d: d });
+          c[3].forEach(function (p, j) { s += box(x + 15, 250 + j * 52, 180, 40, p, { t: "go", mono: true, fs: 16, d: d + 0.3 + j * 0.15 }); });
+        });
+        s += txt(360, 500, "考试周（W10 · W16 · W24）Go 暂停", { cls: "muted", fs: 16, d: 4.8 });
+        return svg(540, s, "24 周时间轴下方是 Go 轨道；三个考试阶段各自对应的 Go 小项目");
+      } },
+    { ch: "go", title: "LeetCode 也挑运维场景",
+      say: [
+        "LeetCode 是练数据结构和手速的，我挑的题都尽量能对上运维场景。比如第 23 题合并 K 个升序链表，就是把多台主机上按时间排好序的日志合并成一份，正好练 Go 的 container/heap。",
+        "第 207 题课程表是拓扑排序，和服务依赖、Ansible role 依赖是同一个问题。第 1011 题是容量规划，第 743 题网络延迟时间是最短路，第 1192 题找关键连接，就是找网络里的单点故障。",
+        "每周 2 到 3 道，一共 56 道。卡住 30 分钟就看题解，第二天自己重写一遍。仓库里有脚本，一条命令就能生成题解和测试骨架。"
+      ],
+      refs: [["LeetCode 刷题计划", "labs/go/leetcode-plan.md"], ["G15 用 Go 刷 LeetCode", "notes/go/15-leetcode-in-go.md"], ["题解目录说明", "go/leetcode/README.md"]],
+      scene: function () {
+        var R = [["23", "合并 K 个升序链表", "合并多台主机按时间排序的日志"], ["207", "课程表", "服务 / role 依赖排序，发现循环依赖"],
+                 ["981", "基于时间的键值存储", "像 etcd 一样按版本读历史值"], ["1011", "在 D 天内送达包裹的能力", "容量规划：最少要多大吞吐"],
+                 ["743", "网络延迟时间", "消息在网络里多久传遍所有节点"], ["1192", "查找集群内的关键连接", "找出网络中的单点故障"],
+                 ["146", "LRU 缓存", "缓存淘汰：map + container/list"]];
+        return '<div class="hs"><div class="map-wrap"><table class="map t-go"><thead><tr><th>LeetCode</th><th></th><th>运维场景</th></tr></thead><tbody>' +
+          R.map(function (r, i) { return '<tr class="fade" ' + stg(0.2 + i * 0.35) + '><td><code>' + r[0] + "</code> " + esc(r[1]) + '</td><td class="arrow">→</td><td>' + esc(r[2]) + "</td></tr>"; }).join("") +
+          "</tbody></table></div>" +
+          term("~/RHCE-CKA", [
+            ["c", "./scripts/new-leetcode.sh 146", 3.0],
+            ["d", "# 生成 go/leetcode/0146-lru-cache/ 下的 solution.go 和 solution_test.go", 3.9],
+            ["c", "cd go && go test ./leetcode/...", 4.4],
+            ["g", "ok  	github.com/guiguisocute/RHCE-CKA/go/leetcode/0001-two-sum", 5.4]
+          ]) + "</div>";
+      } },
+
     /* ===== 串起来 ===== */
     { ch: "wrap", title: "三门考试其实是一张网",
       say: [
@@ -934,7 +1012,7 @@ header .hint { color: var(--muted); font-size: 13px; }
       } },
     { ch: "wrap", title: "你的 24 周",
       say: [
-        "整个计划是 24 周，每周 12 到 15 小时：先用 2 周准备环境，RHCSA 8 周，RHCE 6 周，CKA 8 周，每门的最后一周是模拟考和正式考试。",
+        "整个计划是 24 周，考试每周 12 到 15 小时：先用 2 周准备环境，RHCSA 8 周，RHCE 6 周，CKA 8 周，每门的最后一周是模拟考和正式考试。Go 每周再加 3 到 4 小时，考试周暂停。",
         "每天的节奏是：15 分钟复习错题，40 分钟读一个知识点，35 分钟在虚拟机里动手。周末做一次计时练习。",
         "下一步，打开学习路线页面，从第 1 周开始：申请免费的红帽开发者订阅，装好两台 RHEL 10 虚拟机。导览就到这里，祝你三门都一次通过。"
       ],
@@ -948,13 +1026,18 @@ header .hint { color: var(--muted); font-size: 13px; }
           s += '<g class="pop t-' + g[2] + '" style="--d:' + (0.2 + i * 0.4) + 's"><rect class="bx solid" x="' + (x + 1) + '" y="120" width="' + (w - 2) + '" height="50" rx="4"/>' +
             (i ? '<text class="lb" x="' + (x + w / 2) + '" y="145" style="font-size:18px;fill:var(--surface)">' + g[3] + "</text>" : "") + "</g>";
         });
-        s += txt(x0 + u, 192, "准备 2 周", { cls: "muted", fs: 14, d: 0.3 });
+        s += txt(x0 + u, 200, "准备 2 周", { cls: "muted", fs: 14, d: 0.3 });
+        for (var gw = 1; gw <= 24; gw++) {
+          if (gw === 10 || gw === 16 || gw === 24) continue;
+          s += '<g class="pop t-go" style="--d:' + (1.2 + gw * 0.03).toFixed(2) + 's"><rect class="bx solid" x="' + (x0 + (gw - 1) * u + 2) + '" y="174" width="' + (u - 4) + '" height="6" rx="2"/></g>';
+        }
         [[10, "rhcsa", "EX200"], [16, "rhce", "EX294"], [24, "cka", "CKA"]].forEach(function (e, i) {
           var x = x0 + e[0] * u;
           s += '<g class="pop t-' + e[1] + '" style="--d:' + (2.0 + i * 0.3) + 's"><rect class="bx solid" x="' + (x - 8) + '" y="96" width="16" height="16" transform="rotate(45 ' + x + ' 104)"/></g>';
           s += txt(i === 2 ? x - 4 : x, 76, e[2] + " · 第 " + e[0] + " 周", { cls: "bold tcol", t: e[1], fs: 15, anchor: i === 2 ? "end" : "middle", d: 2.1 + i * 0.3 });
         });
-        [0, 2, 10, 16, 24].forEach(function (w) { if (w !== 2) s += txt(x0 + w * u, 192, String(w), { cls: "mono muted", fs: 13, d: 1.8, anchor: w === 0 ? "start" : w === 24 ? "end" : "middle" }); });
+        [10, 16, 24].forEach(function (w) { s += txt(x0 + w * u, 200, "W" + w, { cls: "mono muted", fs: 13, d: 1.8, anchor: w === 24 ? "end" : "middle" }); });
+        s += txt(700, 214, "紫色细条 = Go 轨道", { cls: "tcol", t: "go", anchor: "end", fs: 13, d: 2.0 });
         [["15 min", "复习错题"], ["40 min", "读一个知识点"], ["35 min", "虚拟机里动手"]].forEach(function (r, i) {
           s += box(20 + i * 235, 250, 210, 90, r[0], { t: "base", sub: r[1], mono: true, fs: 24, d: 3.0 + i * 0.3 });
         });

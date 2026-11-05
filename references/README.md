@@ -18,6 +18,15 @@
 | [`rhce/ansible-navigator-docs/`](rhce/ansible-navigator-docs/) | ansible-navigator（Automation content navigator）官方文档 | [ansible/ansible-navigator](https://github.com/ansible/ansible-navigator) `docs/` | `b412709` (2026-10-13) | Apache-2.0 |
 | [`rhce/rhel-system-roles-upstream/`](rhce/rhel-system-roles-upstream/) | RHEL System Roles 上游 README（firewall / selinux / storage / timesync / network / crypto_policies） | [linux-system-roles](https://github.com/linux-system-roles) | 见下方 | MIT |
 | [`rhel/`](rhel/) | **RHEL 10 官方 PDF 手册**——需在你自己电脑上运行脚本下载（见下文） | docs.redhat.com | — | CC BY-SA 3.0 |
+| [`go/go-docs/`](go/go-docs/) | **Go 官方文档**（go.dev/doc：入门教程、How to Write Go Code、Effective Go、FAQ、模块、竞态检测、Go 1.26/1.27 发布说明） | [golang/website](https://github.com/golang/website) `_content/doc` | `6ac127a` (2026-11-04) | CC BY 4.0 / BSD |
+| [`go/tour/`](go/tour/) | **Tour of Go** 官方交互教程原文（`.article` + 示例代码） | golang/website `_content/tour` | 同上 | BSD |
+| [`go/spec/`](go/spec/) | Go 语言规范、内存模型 | [golang/go](https://github.com/golang/go) `doc/` | `35455b8` | BSD |
+| [`go/gobyexample/`](go/gobyexample/) | Go by Example 全部示例（社区经典，非官方） | [mmcgrana/gobyexample](https://github.com/mmcgrana/gobyexample) | `5d9b1f1` (2026-10-31) | CC BY 3.0 |
+| [`go/cobra-docs/`](go/cobra-docs/) | cobra 命令行框架文档（kubectl、helm 都用它） | [spf13/cobra](https://github.com/spf13/cobra) `site/content` | `adbc881` (2026-07-10) | Apache-2.0 |
+| [`go/k8s/client-go-examples/`](go/k8s/client-go-examples/) | client-go 官方示例 | [kubernetes/client-go](https://github.com/kubernetes/client-go) `examples` | `675830c` (2026-11-05) | Apache-2.0 |
+| [`go/k8s/sample-controller/`](go/k8s/sample-controller/) | 官方示例控制器（CRD + informer + workqueue） | [kubernetes/sample-controller](https://github.com/kubernetes/sample-controller) | `0c40c89` (2026-11-02) | Apache-2.0 |
+| [`go/k8s/kubebuilder-book/`](go/k8s/kubebuilder-book/) | Kubebuilder Book（快速开始、CronJob 教程、参考） | [kubernetes-sigs/kubebuilder](https://github.com/kubernetes-sigs/kubebuilder) `docs/book/src` | `a537b6b` (2026-11-04) | Apache-2.0 |
+| [`go/prometheus-client-golang-examples/`](go/prometheus-client-golang-examples/) | Prometheus Go 客户端官方示例（写 exporter 用） | [prometheus/client_golang](https://github.com/prometheus/client_golang) `examples` | `7c6a403` (2026-11-04) | Apache-2.0 |
 
 linux-system-roles 各仓库 commit：firewall `4a74f21`、selinux `4e8b470`、storage `919b193`、timesync `5523983`、network `cd35767`、crypto_policies `36146a6`。
 
@@ -64,6 +73,14 @@ grep -rl "kind: NetworkPolicy" references/cka/kubernetes-docs | head
 grep -rn "become_user" references/rhce/ansible-docs/playbook_guide | head
 ```
 
+## Go 资料怎么读
+
+Go 是本仓库的第四条学习线（运维开发方向），学习顺序见 [`../notes/go/README.md`](../notes/go/README.md)。
+
+- `tour/*.article` 是 Tour of Go 的原文，直接读就行；想要可交互的版本，在本机运行 `go install golang.org/x/website/tour@latest` 后执行 `tour`。
+- `go-docs/` 下的 `.html` 文件是 go.dev 网站的页面模板，浏览器可以直接打开（样式会缺失，内容完整）。
+- 写代码时最常用的是本机命令：`go doc strings.Split`、`go doc -all os/exec`、`go help modules`。
+
 ## 官方但无法离线保存的资源（只给链接）
 
 | 资源 | 说明 |
@@ -72,6 +89,10 @@ grep -rn "become_user" references/rhce/ansible-docs/playbook_guide | head
 | [RH024 Red Hat Enterprise Linux Technical Overview](https://www.redhat.com/en/services/training/rh024-red-hat-linux-technical-overview) | 红帽官方免费入门课 |
 | [DO007 Ansible Basics: Automation Technical Overview](https://www.redhat.com/en/services/training/do007-ansible-essentials-simplicity-automation-technical-overview) | 红帽官方免费 Ansible 入门课 |
 | [Red Hat Learning Community](https://learn.redhat.com/) | 官方学习社区，考试经验帖、考纲变更公告 |
+| [pkg.go.dev](https://pkg.go.dev/) | Go 标准库和第三方包的在线文档 |
+| [Go Playground](https://go.dev/play/) | 在线运行 Go 代码片段 |
+| [Go 语言之旅（中文）](https://tour.go-zh.org/) | Go 中文社区翻译的 Tour of Go（社区维护） |
+| [LeetCode 中国站](https://leetcode.cn/) / [LeetCode](https://leetcode.com/) | 刷题，两个站点题号一致；本仓库的刷题计划见 [`../labs/go/leetcode-plan.md`](../labs/go/leetcode-plan.md) |
 | [LFS158 Introduction to Kubernetes](https://training.linuxfoundation.org/training/introduction-to-kubernetes/) | Linux Foundation 官方免费 Kubernetes 入门课 |
 | [killer.sh](https://killer.sh/) | 购买 CKA 考试后附赠 2 次官方模拟考环境（比真题难，用于最后冲刺） |
 | [Kubernetes 中文文档](https://kubernetes.io/zh-cn/docs/) | 官方中文翻译（考试时只能看英文版更稳妥，练习时可对照） |

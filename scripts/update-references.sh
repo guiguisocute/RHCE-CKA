@@ -24,6 +24,13 @@ sparse_clone helm/helm-www helm docs
 sparse_clone kubernetes-sigs/gateway-api gw site/content/en
 sparse_clone ansible/ansible-documentation ansible docs/docsite/rst
 sparse_clone ansible/ansible-navigator nav docs
+sparse_clone golang/website gosite _content/doc _content/tour
+sparse_clone mmcgrana/gobyexample gobyex examples
+sparse_clone spf13/cobra cobra site/content
+sparse_clone kubernetes/client-go clientgo examples
+sparse_clone kubernetes/sample-controller samplectl pkg artifacts docs
+sparse_clone kubernetes-sigs/kubebuilder kb docs/book/src
+sparse_clone prometheus/client_golang promgo examples
 
 echo "==> CKA 考纲"
 rm -f "${R}"/cka/CKA_Curriculum_*.pdf
@@ -66,6 +73,25 @@ for role in firewall selinux storage timesync network crypto_policies; do
   curl -fsSL -o "$S/${role}-README.md" "https://raw.githubusercontent.com/linux-system-roles/${role}/main/README.md"
 done
 curl -fsSL -o "$S/LICENSE" "https://raw.githubusercontent.com/linux-system-roles/timesync/main/COPYING"  # MIT
+
+echo "==> Go 资料"
+GO="${R}/go"; rm -rf "$GO"; mkdir -p "$GO/go-docs" "$GO/spec" "$GO/gobyexample" "$GO/k8s/sample-controller" "$GO/k8s/kubebuilder-book"
+for f in effective_go.html code.html faq.md fuzz.md comment.md diagnostics.html gc-guide.html; do cp "${TMP}/gosite/_content/doc/$f" "$GO/go-docs/"; done
+for f in $(ls "${TMP}"/gosite/_content/doc/go1.[0-9]*.md | sort -V | tail -3 | head -2); do cp "$f" "$GO/go-docs/"; done   # 最近两个已发布版本的发布说明（最后一个通常是开发中的草稿）
+for d in tutorial modules articles database; do cp -r "${TMP}/gosite/_content/doc/$d" "$GO/go-docs/"; done
+cp "${TMP}/gosite/LICENSE" "$GO/go-docs/LICENSE"
+printf 'go.dev 网站内容采用 CC BY 4.0，代码采用 BSD 许可证（见 LICENSE）。来源：https://github.com/golang/website/tree/master/_content/doc\n' > "$GO/go-docs/COPYRIGHT.txt"
+cp -r "${TMP}/gosite/_content/tour" "$GO/tour"; cp "${TMP}/gosite/LICENSE" "$GO/tour/LICENSE"
+for f in go_spec.html go_mem.html; do curl -fsSL -o "$GO/spec/$f" "https://raw.githubusercontent.com/golang/go/master/doc/$f"; done
+cp "${TMP}/gosite/LICENSE" "$GO/spec/LICENSE"
+cp -r "${TMP}/gobyex/examples" "$GO/gobyexample/"; cp "${TMP}/gobyex/examples.txt" "$GO/gobyexample/"
+printf 'Go by Example: copyright Mark McGranaghan, licensed under CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/).\n来源：https://github.com/mmcgrana/gobyexample\n' > "$GO/gobyexample/LICENSE.txt"
+cp -r "${TMP}/cobra/site/content" "$GO/cobra-docs"; cp "${TMP}/cobra/LICENSE.txt" "$GO/cobra-docs/"
+cp -r "${TMP}/clientgo/examples" "$GO/k8s/client-go-examples"; cp "${TMP}/clientgo/LICENSE" "$GO/k8s/client-go-examples/"
+(cd "${TMP}/samplectl" && cp -r README.md LICENSE controller.go controller_test.go main.go go.mod artifacts docs pkg "$GO/k8s/sample-controller/")
+(cd "${TMP}/kb/docs/book/src" && cp -r SUMMARY.md introduction.md quick-start.md architecture.md getting-started cronjob-tutorial reference "$GO/k8s/kubebuilder-book/")
+cp "${TMP}/kb/LICENSE" "$GO/k8s/kubebuilder-book/"
+cp -r "${TMP}/promgo/examples" "$GO/prometheus-client-golang-examples"; cp "${TMP}/promgo/LICENSE" "$GO/prometheus-client-golang-examples/"
 
 find "$R" -name OWNERS -delete
 find "$R" -xtype l -delete   # 上游仓库里指向稀疏克隆之外的软链接
