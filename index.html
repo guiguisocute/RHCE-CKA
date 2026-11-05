@@ -82,6 +82,7 @@ code, .mono { font-family: var(--font-mono); font-size: 0.88em; }
 /* Header */
 header.top { background: var(--surface); border-bottom: 1px solid var(--line); }
 header.top .wrap { padding-block: 40px 28px; display: grid; gap: 18px; }
+.tour-link { display: inline-block; text-decoration: none; background: var(--accent); color: var(--accent-ink); padding: 6px 14px; border-radius: var(--radius); font-size: var(--step--1); font-weight: 500; }
 .lead { max-width: 62ch; color: var(--muted); font-size: var(--step-1); }
 .route { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; font-family: var(--font-display); font-weight: 600; font-size: var(--step-1); }
 .route .stop { display: inline-flex; align-items: baseline; gap: 8px; padding: 4px 12px; border: 1.5px solid var(--t); color: var(--t); border-radius: 999px; }
@@ -239,6 +240,7 @@ footer .wrap { padding-block: 24px 40px; font-size: var(--step--1); color: var(-
       <span class="stop t-rhce">RHCE <small>EX294 · 第 16 周</small></span><span class="arrow">→</span>
       <span class="stop t-cka">CKA <small>第 24 周</small></span>
     </div>
+    <p><a class="tour-link" data-path="tour.html">先看 25 步考试导览：一步一步讲清三场考试考什么 →</a></p>
     <p class="lead">起点：用过 Ubuntu 和 Docker / Compose，没碰过 RHEL。先用 2 周把环境和基本功补齐，再按「Linux 管理 → 用 Ansible 自动化它 → 上 Kubernetes 运维集群」的顺序推进。每周 12~15 小时。</p>
     <div class="overall">
       <div class="bar" aria-hidden="true"><span id="overall-bar"></span></div>

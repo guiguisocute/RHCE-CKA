@@ -2,7 +2,7 @@
 """检查仓库内 Markdown / HTML 的相对链接是否有效。
 
 用法：python3 scripts/check-links.py [路径 ...]
-默认检查 README.md、index.html、notes/、labs/、journal/、references/README.md。
+默认检查 README.md、index.html、tour.html、notes/、labs/、journal/、references/README.md。
 
 - 只检查相对链接（不访问网络），忽略 http(s)://、mailto: 等。
 - 指向 .md 文件的锚点（file.md#小节 或 #小节）会按 GitHub 的标题锚点规则校验，
@@ -15,7 +15,7 @@ from pathlib import Path
 from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT = ["README.md", "index.html", "notes", "labs", "journal", "references/README.md"]
+DEFAULT = ["README.md", "index.html", "tour.html", "notes", "labs", "journal", "references/README.md"]
 MD_LINK = re.compile(r"\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
 HTML_LINK = re.compile(r"""(?:href|src)=["']([^"']+)["']""")
 EXPLICIT_ANCHOR = re.compile(r"""<a\s+(?:id|name)=["']([^"']+)["']""")

@@ -8,15 +8,17 @@
 
 ## 从这里开始
 
-1. **打开 [`index.html`](index.html)**（下载仓库后用浏览器打开）：可视化学习路线、逐周计划、可勾选的进度、知识网络浏览器。
-2. 按路线进入 [`notes/`](notes/README.md) 学知识点，每篇笔记都标明了前置、后续、跨考试关联和官方文档位置。
-3. 学完一个知识点就去 [`labs/`](labs/README.md) 动手，错题和心得写进 [`journal/`](journal/README.md)。
-4. 查原始官方文档：[`references/`](references/README.md)。
+1. **先看 [`tour.html`](tour.html) 考试导览**（下载仓库后用浏览器打开）：25 步动画讲解，一步一步介绍 RHCSA、RHCE、CKA 分别考什么，可以打开「朗读」听讲解。
+2. **再打开 [`index.html`](index.html)**：可视化学习路线、逐周计划、可勾选的进度、知识网络浏览器。
+3. 按路线进入 [`notes/`](notes/README.md) 学知识点，每篇笔记都标明了前置、后续、跨考试关联和官方文档位置。
+4. 学完一个知识点就去 [`labs/`](labs/README.md) 动手，错题和心得写进 [`journal/`](journal/README.md)。
+5. 查原始官方文档：[`references/`](references/README.md)。
 
 ## 仓库结构
 
 ```text
 .
+├── tour.html                  # 考试导览：25 步动画讲解 + 语音朗读
 ├── index.html                 # 学习路线总览（逐周计划 + 进度勾选 + 知识网络浏览器）
 ├── notes/                     # 知识网络：每篇笔记是一个节点，互相链接
 │   ├── README.md              #   全局知识地图（Mermaid）+ 节点清单
