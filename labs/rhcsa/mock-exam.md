@@ -106,21 +106,21 @@ serverb 导出了 `/exports/home`。配置 autofs：`remoteuser1`（UID 3001，�
 | 题 | 分值 | 检查命令（全部通过才得分） | 得分 |
 |---|---|---|---|
 | 1 | 必做 | 控制台以 `root / trootent` 登录成功；`getenforce` = Enforcing | |
-| 2 | 15 | `ip -br a`、`ip route`、`cat /etc/resolv.conf`、`hostnamectl` | |
-| 3 | 15 | `dnf repolist` 显示两个仓库；`dnf install -y tmux` 成功 | |
-| 4 | 20 | serverb 上 `curl http://servera:82/file1`；`systemctl is-enabled httpd`；`getenforce` | |
+| 2 | 20 | `ip -br a`、`ip route`、`cat /etc/resolv.conf`、`hostnamectl` | |
+| 3 | 20 | `dnf repolist` 显示两个仓库；`dnf install -y tmux` 成功 | |
+| 4 | 25 | serverb 上 `curl http://servera:82/file1`；`systemctl is-enabled httpd`；`getenforce` | |
 | 5 | 15 | `id natasha harry sarah`；`getent passwd sarah`；`su - harry` 密码登录 | |
-| 6 | 15 | `ls -ld /common/admin` = `drwxrws---` + `sysmgrs`；natasha 新建文件属组为 sysmgrs | |
+| 6 | 20 | `ls -ld /common/admin` = `drwxrws---` + `sysmgrs`；natasha 新建文件属组为 sysmgrs | |
 | 7 | 10 | `crontab -l -u natasha` = `23 14 * * * /bin/echo hiya` | |
 | 8 | 10 | `su - natasha -c 'sudo -n true' && echo OK` | |
 | 9 | 10 | `chronyc sources` 中 serverb 为 `^*` | |
-| 10 | 20 | `su - remoteuser1` → `pwd`、`touch t`、`findmnt /home/remote/remoteuser1` | |
+| 10 | 25 | `su - remoteuser1` → `pwd`、`touch t`、`findmnt /home/remote/remoteuser1` | |
 | 11 | 10 | `ls -l /root/findfiles` 中属主为 student | |
 | 12 | 10 | `diff <(grep ich 源文件) /root/wordlist` 无输出；`grep -c '^$' /root/wordlist` = 0 | |
 | 13 | 10 | `tar -tjf /root/backup.tar.bz2 \| head` | |
-| 14 | 15 | `swapon --show` 显示原 swap + 约 512 MiB 新 swap | |
-| 15 | 20 | `vgdisplay datastore \| grep 'PE Size'` = 16 MiB；`lvdisplay datastore/database` LE = 50；`findmnt /mnt/database` 类型 ext4 | |
-| 16 | 15 | `lvs datastore/vo` 在 270~330 MiB；`df -h /reports` 同步变大；扩容前写入的文件仍在 | |
+| 14 | 20 | `swapon --show` 显示原 swap + 约 512 MiB 新 swap | |
+| 15 | 25 | `vgdisplay datastore \| grep 'PE Size'` = 16 MiB；`lvdisplay datastore/database` LE = 50；`findmnt /mnt/database` 类型 ext4 | |
+| 16 | 20 | `lvs datastore/vo` 在 270~330 MiB；`df -h /reports` 同步变大；扩容前写入的文件仍在 | |
 | 17 | 10 | `tuned-adm active` = `tuned-adm recommend` | |
 | 18 | 10 | `journalctl --list-boots` ≥ 2 条 | |
 | 19 | 10 | `su - student -c 'umask'` = `0227`；新建文件权限 `-r--r-----` | |
