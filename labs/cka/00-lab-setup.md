@@ -252,7 +252,15 @@ kubectl -n kube-system get pod etcd-cp1 -o jsonpath='{.spec.containers[0].image}
 ETCD_VER=v3.6.x   # 替换为上面查到的版本
 curl -fsSL https://github.com/etcd-io/etcd/releases/download/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz | tar xz
 sudo mv etcd-${ETCD_VER}-linux-amd64/{etcdctl,etcdutl} /usr/local/bin/
+
+# Gateway API CRD（standard channel；版本号以 Gateway API 入门文档为准）
+kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/<版本>/standard-install.yaml
+kubectl get crd | grep gateway.networking.k8s.io
 ```
+
+Ingress 控制器和 Gateway API 实现（练 K13 用）：CRD 只是 API 定义，还要装一个真正处理流量的控制器。
+安装思路和可选实现见 [practice-set-1 的 K13 小节开头](practice-set-1.md#k13-ingress-与-gateway-api)，
+CRD 安装命令见 [Gateway API 入门](../../references/cka/gateway-api-docs/guides/getting-started/introduction.md)。
 
 ### B.11 快照策略（非常重要）
 

@@ -152,7 +152,7 @@ users:
 ## 复盘方法
 
 1. 丢分的题，回到对应笔记节点：第 1 题 → [E2](../../notes/rhce/02-inventory-and-config.md)；第 2 题 → [E3](../../notes/rhce/03-adhoc-modules-docs.md)；第 3、7 题 → [E9](../../notes/rhce/09-collections-navigator.md)；第 4、6 题 → [E8](../../notes/rhce/08-roles.md)；第 8、9 题 → [E12](../../notes/rhce/12-rhel-system-roles.md)；第 10、11 题 → [E6](../../notes/rhce/06-loops-conditions-errors.md) + [E11](../../notes/rhce/11-automate-rhcsa-tasks.md)；第 12、15 题 → [E7](../../notes/rhce/07-jinja2-templates.md)；第 16~18 题 → [E10](../../notes/rhce/10-vault.md)。
-2. 把错误写进学习日志的错题本（见仓库根目录 `journal/`）。
+2. 把错误写进[错题本](../../journal/mistakes.md)。
 3. 记录每题用时，超过 15 分钟的题型重点刷 [分节练习](practice-set-1.md)。
 4. 两次模拟考都 ≥ 240 分再预约正式考试。
 

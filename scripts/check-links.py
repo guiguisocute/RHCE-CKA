@@ -26,7 +26,8 @@ def iter_files(args):
     for a in args or DEFAULT:
         p = (ROOT / a) if not Path(a).is_absolute() else Path(a)
         if p.is_dir():
-            yield from sorted(x for x in p.rglob("*") if x.suffix in (".md", ".html"))
+            # _template.md 里是占位链接，跳过
+            yield from sorted(x for x in p.rglob("*") if x.suffix in (".md", ".html") and x.name != "_template.md")
         elif p.exists():
             yield p
 
