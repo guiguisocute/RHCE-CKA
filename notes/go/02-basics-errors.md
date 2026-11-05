@@ -62,10 +62,10 @@ import (
 type ServiceState int
 
 const (
-	Unknown ServiceState = iota // 0
-	Active                      // 1
-	Inactive                    // 2
-	Failed                      // 3
+	Unknown  ServiceState = iota // 0
+	Active                       // 1
+	Inactive                     // 2
+	Failed                       // 3
 )
 
 // loadConfig 读文件；出错时用 %w 包装，保留原始错误供调用方判断

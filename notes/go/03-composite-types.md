@@ -80,7 +80,7 @@ web1 web 10.0.0.11`
 	a := []int{1, 2, 3, 4}
 	b := a[:2]
 	b = append(b, 99) // cap 还够，直接写进了 a[2]
-	fmt.Println(a, b)  // [1 2 99 4] [1 2 99]
+	fmt.Println(a, b) // [1 2 99 4] [1 2 99]
 
 	// 坑：range 拿到的是副本，要改原切片得用下标
 	for i := range hosts {

@@ -8,8 +8,7 @@
 
 ## 1. 这个知识点在网络中的位置
 
-这是 Go 运维开发里**最常用**的一节。Go 标准库本身就够写大部分运维工具，不需要第三方依赖。
-学 RHCSA 时你会用 `grep 'Failed password' /var/log/secure | awk ... | sort | uniq -c`，这周就用 Go 写一个功能相同、但能处理各种边界情况、能写测试、能编成二进制分发的版本。这就是项目 P1。
+这是 Go 运维开发里**最常用**的一节，标准库本身就够写大部分运维工具。学 RHCSA 时你会用 `grep 'Failed password' /var/log/secure | awk ... | sort | uniq -c`，这周就用 Go 写一个功能相同、但能处理各种边界情况、能写测试、能编成二进制分发的版本。这就是项目 P1。
 
 ## 2. 核心概念
 
@@ -136,12 +135,9 @@ func main() {
 }
 ```
 
-```bash
-sudo go run . -n 3 -unit sshd          # 读 /var/log/secure 需要 root
-journalctl -u sshd --no-pager | go run . -f -   # 没有 /var/log/secure 的系统，从 journald 读
-```
+运行：`sudo go run . -n 3 -unit sshd`（读 /var/log/secure 需要 root）；没有这个文件的系统用 `journalctl -u sshd --no-pager | go run . -f -`。
 
-**遍历目录、原子写文件、解析 journald 的 JSON 输出**
+**遍历目录、原子写文件、解析 journald**
 
 ```go
 // bigFiles 找出超过 limit 字节的文件，相当于 find /var/log -size +100M
@@ -180,14 +176,9 @@ func writeFileAtomic(path string, data []byte, perm os.FileMode) error {
 	}
 	return os.Rename(tmp.Name(), path)
 }
-
-// journalctl -u sshd -o json 每行一个 JSON 对象
-type journalEntry struct {
-	Unit    string `json:"_SYSTEMD_UNIT"`
-	Message string `json:"MESSAGE"`
-	TS      string `json:"__REALTIME_TIMESTAMP"` // 微秒时间戳，字符串形式
-}
 ```
+
+解析 `journalctl -u sshd -o json`：每行是一个 JSON 对象，定义 ``struct{ Message string `json:"MESSAGE"` }`` 这样的字段映射后逐行 `json.Unmarshal` 即可。
 
 ## 4. 考试坑点
 
@@ -196,12 +187,10 @@ type journalEntry struct {
 - **超时被杀也是 `*exec.ExitError`**：判断退出码之前先看 `ctx.Err()`，否则会把「超时」当成「服务 inactive」。
 - **时间格式要用参考时间**：`2006-01-02 15:04:05`，不是 `YYYY-MM-DD`。syslog 的 `Nov  5 08:01:02` 没有年份，`time.Parse(time.Stamp, ...)` 解析出来是 0 年，要自己补年份。
 - **SELinux**：Go 程序以服务身份写 `/var/log`、`/etc` 时，被 SELinux 拒绝和被文件权限拒绝的报错都是 `permission denied`，要去 `ausearch -m avc` 里确认（见 [S9](../rhcsa/09-security-firewalld-selinux.md)）。
-- **`os.WriteFile` 不是原子的**：改重要配置用「临时文件 + rename」。
 
 ## 5. 动手练习
 
-- 第 5 周项目：[P1 logstat](../../labs/go/projects.md#p1)，在上面代码基础上加 `-since` 时间过滤和 JSON 输出。
-- 第 7 周项目：[P3 svcwatch](../../labs/go/projects.md#p3)，批量检查一组 systemd 服务，非 active 的打印 `systemctl status` 的最后 5 行。
+- 第 5 周项目：[P1 logstat](../../labs/go/projects.md#p1)（加 `-since` 时间过滤和 JSON 输出）；第 7 周项目：[P3 svcwatch](../../labs/go/projects.md#p3)（批量检查 systemd 服务，非 active 的打印 `systemctl status` 最后 5 行）。
 
 **配套 LeetCode**
 
